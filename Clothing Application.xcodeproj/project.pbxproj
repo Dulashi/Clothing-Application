@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA18B1B22BA973A5009ADDE9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B12BA973A5009ADDE9 /* LoginView.swift */; };
+		BA18B1B42BA973B6009ADDE9 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B32BA973B6009ADDE9 /* AccountView.swift */; };
+		BA18B1B62BA973D2009ADDE9 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */; };
 		BAD407DF2B9C4B4500829528 /* Clothing_ApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407DE2B9C4B4500829528 /* Clothing_ApplicationApp.swift */; };
 		BAD407E12B9C4B4500829528 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407E02B9C4B4500829528 /* ContentView.swift */; };
 		BAD407E32B9C4B4500829528 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407E22B9C4B4500829528 /* Item.swift */; };
@@ -35,6 +38,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BA18B1B12BA973A5009ADDE9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		BA18B1B32BA973B6009ADDE9 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
 		BAD407DB2B9C4B4500829528 /* Clothing Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Clothing Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD407DE2B9C4B4500829528 /* Clothing_ApplicationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothing_ApplicationApp.swift; sourceTree = "<group>"; };
 		BAD407E02B9C4B4500829528 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -73,6 +79,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BA18B1AE2BA9736D009ADDE9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BA18B1B12BA973A5009ADDE9 /* LoginView.swift */,
+				BA18B1B32BA973B6009ADDE9 /* AccountView.swift */,
+				BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BA18B1AF2BA9737B009ADDE9 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		BA18B1B02BA9738B009ADDE9 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		BAD407D22B9C4B4500829528 = {
 			isa = PBXGroup;
 			children = (
@@ -96,6 +126,9 @@
 		BAD407DD2B9C4B4500829528 /* Clothing Application */ = {
 			isa = PBXGroup;
 			children = (
+				BA18B1B02BA9738B009ADDE9 /* Models */,
+				BA18B1AF2BA9737B009ADDE9 /* ViewModels */,
+				BA18B1AE2BA9736D009ADDE9 /* Views */,
 				BAD407DE2B9C4B4500829528 /* Clothing_ApplicationApp.swift */,
 				BAD407E02B9C4B4500829528 /* ContentView.swift */,
 				BAD407E22B9C4B4500829528 /* Item.swift */,
@@ -260,9 +293,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA18B1B62BA973D2009ADDE9 /* CreateAccountView.swift in Sources */,
 				BAD407E12B9C4B4500829528 /* ContentView.swift in Sources */,
 				BAD407E32B9C4B4500829528 /* Item.swift in Sources */,
+				BA18B1B22BA973A5009ADDE9 /* LoginView.swift in Sources */,
 				BAD407DF2B9C4B4500829528 /* Clothing_ApplicationApp.swift in Sources */,
+				BA18B1B42BA973B6009ADDE9 /* AccountView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
