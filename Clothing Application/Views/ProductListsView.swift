@@ -12,37 +12,40 @@ struct ProductListsView: View {
     
     var body: some View {
         List(viewModel.products, id: \.name) { (product: Product) in
-            VStack(alignment: .leading) {
-                Text(product.name)
-                    .font(.headline)
-                Text(product.description)
-                    .font(.subheadline)
-                Text("$\(product.price)")
-                    .font(.subheadline)
-                    .foregroundColor(.green)
-               
-                                Text("Sizes: \(product.sizes.joined(separator: ", "))")
-                                    .font(.subheadline)
-                                
-                                Text("Colors: \(product.colors.joined(separator: ", "))")
-                                    .font(.subheadline)
-                                
-                                ForEach(product.images, id: \.self) { imageName in
-                                    Image(imageName)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 100, height: 100)
-                                }
+            VStack(alignment: .leading){
+                    
+                    Text(product.name)
+                        .font(.headline)
+                    Text(product.description)
+                        .font(.subheadline)
+                    Text("$\(product.price)")
+                        .font(.subheadline)
+                        .foregroundColor(.green)
+                    
+                    Text("Sizes: \(product.sizes.joined(separator: ", "))")
+                        .font(.subheadline)
+                    
+                    Text("Colors: \(product.colors.joined(separator: ", "))")
+                        .font(.subheadline)
+                    
+                    ForEach(product.images, id: \.self) { imageName in
+                        Image(imageName)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                    }
+                }
+            }
+            .onAppear {
+                viewModel.fetchProducts { _, _ in }
             }
         }
-        .onAppear {
-            viewModel.fetchProducts { _, _ in }
+    }
+
+    
+    struct ProductListsView_Previews: PreviewProvider {
+        static var previews: some View {
+            ProductListsView()
         }
     }
-}
 
-struct ProductListsView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProductListsView()
-    }
-}

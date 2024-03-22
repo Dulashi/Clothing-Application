@@ -13,6 +13,7 @@
 		BA18B1BC2BABED2B009ADDE9 /* ProductListsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1BB2BABED2B009ADDE9 /* ProductListsModel.swift */; };
 		BA18B1BE2BABED48009ADDE9 /* ProductListsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1BD2BABED48009ADDE9 /* ProductListsView.swift */; };
 		BA18B1C02BABED9D009ADDE9 /* ProductViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1BF2BABED9D009ADDE9 /* ProductViewModel.swift */; };
+		BA18B1C82BACA75B009ADDE9 /* CollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1C72BACA75B009ADDE9 /* CollectionsView.swift */; };
 		BAD407DF2B9C4B4500829528 /* Clothing_ApplicationApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407DE2B9C4B4500829528 /* Clothing_ApplicationApp.swift */; };
 		BAD407E12B9C4B4500829528 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407E02B9C4B4500829528 /* ContentView.swift */; };
 		BAD407E32B9C4B4500829528 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD407E22B9C4B4500829528 /* Item.swift */; };
@@ -47,6 +48,7 @@
 		BA18B1BB2BABED2B009ADDE9 /* ProductListsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListsModel.swift; sourceTree = "<group>"; };
 		BA18B1BD2BABED48009ADDE9 /* ProductListsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListsView.swift; sourceTree = "<group>"; };
 		BA18B1BF2BABED9D009ADDE9 /* ProductViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewModel.swift; sourceTree = "<group>"; };
+		BA18B1C72BACA75B009ADDE9 /* CollectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsView.swift; sourceTree = "<group>"; };
 		BAD407DB2B9C4B4500829528 /* Clothing Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Clothing Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BAD407DE2B9C4B4500829528 /* Clothing_ApplicationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clothing_ApplicationApp.swift; sourceTree = "<group>"; };
 		BAD407E02B9C4B4500829528 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				BA18B1B32BA973B6009ADDE9 /* AccountView.swift */,
 				BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */,
 				BA18B1BD2BABED48009ADDE9 /* ProductListsView.swift */,
+				BA18B1C72BACA75B009ADDE9 /* CollectionsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				BA18B1BE2BABED48009ADDE9 /* ProductListsView.swift in Sources */,
 				BA18B1C02BABED9D009ADDE9 /* ProductViewModel.swift in Sources */,
 				BA18B1B22BA973A5009ADDE9 /* LoginView.swift in Sources */,
+				BA18B1C82BACA75B009ADDE9 /* CollectionsView.swift in Sources */,
 				BAD407DF2B9C4B4500829528 /* Clothing_ApplicationApp.swift in Sources */,
 				BA18B1B42BA973B6009ADDE9 /* AccountView.swift in Sources */,
 			);
