@@ -13,6 +13,6 @@ struct Product: Codable {
     let price: Double
     let sizes: [String]
     let colors: [String]
-    let images: [String]
+    let imageUrls: [String] // Changed 'images' to 'imageUrls'
     let available: Bool
 }
