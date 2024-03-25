@@ -9,10 +9,11 @@ import Foundation
 
 struct Product: Codable {
     let name: String
-    let description: String
+    let category: String
     let price: Double
     let sizes: [String]
     let colors: [String]
-    let imageUrls: [String] // Changed 'images' to 'imageUrls'
+    let description: String
+    let imageUrls: [String]
     let available: Bool
 }

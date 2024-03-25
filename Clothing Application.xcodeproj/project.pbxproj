@@ -119,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				BAD407DD2B9C4B4500829528 /* Clothing Application */,
-				BAD407F02B9C4B4600829528 /* Clothing ApplicationTests */,
 				BAD407FA2B9C4B4700829528 /* Clothing ApplicationUITests */,
 				BAD407DC2B9C4B4500829528 /* Products */,
 			);
@@ -154,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				BAD407E72B9C4B4600829528 /* Preview Assets.xcassets */,
+				BAD407F02B9C4B4600829528 /* Clothing ApplicationTests */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";

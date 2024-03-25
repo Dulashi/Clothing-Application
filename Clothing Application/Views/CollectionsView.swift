@@ -78,14 +78,14 @@ struct CollectionOptionView: View {
                 Text(title)
                     .font(.headline)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
             }
             .padding()
         }
-        .background(Color.red.opacity(0.2))
+        .background(Color.black.opacity(8))
         .cornerRadius(10)
     }
 }
@@ -94,8 +94,4 @@ struct CollectionsView_Previews: PreviewProvider {
     static var previews: some View {
         CollectionsView()
     }
-}
-
-#Preview {
-    CollectionsView()
 }

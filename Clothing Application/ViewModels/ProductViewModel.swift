@@ -24,9 +24,11 @@ class ProductViewModel: ObservableObject {
 
             do {
                 let decodedData = try JSONDecoder().decode([Product].self, from: data)
+                // Filter products by category "Dresses"
+                let dressesProducts = decodedData.filter { $0.category == "Dresses" }
                 DispatchQueue.main.async {
-                    self.products = decodedData
-                    completion(decodedData, nil)
+                    self.products = dressesProducts
+                    completion(dressesProducts, nil)
                 }
             } catch {
                 DispatchQueue.main.async {
