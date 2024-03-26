@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedProducts: [Product] = []
     var body: some View {
        ProductListsView()
     }
