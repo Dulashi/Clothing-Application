@@ -154,9 +154,13 @@ struct ProductItemView: View {
             .background(Color.white)
             .cornerRadius(10)
         }
+        
         .sheet(isPresented: $isShowingDetail) {
-            ProductDetailView(product: product) // Present detail view with selected product
+            ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
         }
+
+        
+
         .sheet(isPresented: $isShowingPopup) {
             ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
         }
