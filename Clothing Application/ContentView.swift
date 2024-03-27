@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var cartItemsCount = 0 // Example state for cartItemsCount
+    
     var body: some View {
-        ProductListsView() 
+        CollectionsView(cartItemsCount: $cartItemsCount)
     }
 }
 
