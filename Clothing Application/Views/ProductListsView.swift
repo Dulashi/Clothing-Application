@@ -4,9 +4,7 @@
 //
 //  Created by Ashini Dulashi on 2024-03-21.
 //
-
 import SwiftUI
-
 struct ProductListsView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var isShowingSortOptions = false
@@ -80,7 +78,6 @@ struct ProductListsView: View {
         }
     }
 }
-
 struct ProductItemView: View {
     let product: Product
     @Binding var cartItemsCount: Int
@@ -154,18 +151,17 @@ struct ProductItemView: View {
             .background(Color.white)
             .cornerRadius(10)
         }
-        
+
         .sheet(isPresented: $isShowingDetail) {
             ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
         }
 
-        
+
 
         .sheet(isPresented: $isShowingPopup) {
             ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
         }
     }
-
     
     private func loadImage() {
         guard let firstImageUrl = product.imageUrls.first,
@@ -184,8 +180,6 @@ struct ProductItemView: View {
         }.resume()
     }
 }
-
-
 struct ProductSelectionPopup: View {
     let product: Product
     @Binding var cartItemsCount: Int
@@ -322,8 +316,6 @@ struct ProductSelectionPopup: View {
         }.resume()
     }
 }
-
-
     struct SortOptionsView: View {
         var body: some View {
             VStack {
@@ -440,4 +432,3 @@ struct ProductSelectionPopup: View {
             return false
         }
     }
-    
