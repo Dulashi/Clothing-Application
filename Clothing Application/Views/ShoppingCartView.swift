@@ -1,16 +1,10 @@
-//
-//  ShoppingCartView.swift
-//  Clothing Application
-//
-//  Created by Ashini Dulashi on 2024-03-25.
-//
-
 import SwiftUI
 
 struct ShoppingCartView: View {
     @Binding var selectedProducts: [Product]
     @State private var imageDatas: [Data?] = []
     @State private var quantities: [Int] = []
+    @State private var isCheckoutSheetPresented = false // State to control the presentation of the CheckoutView
     
     var totalPrice: Double {
         var total: Double = 0.0
@@ -106,7 +100,8 @@ struct ShoppingCartView: View {
                     .padding(.bottom)
                 
                 Button(action: {
-                    // Action when checkout button is tapped
+                    // Show checkout sheet
+                    isCheckoutSheetPresented = true
                 }) {
                     Text("Checkout")
                         .foregroundColor(.white)
@@ -116,6 +111,11 @@ struct ShoppingCartView: View {
                         .cornerRadius(10)
                         .padding(.horizontal)
                 }
+                .sheet(isPresented: $isCheckoutSheetPresented) {
+                    // Present CheckoutView with selectedProducts and quantities
+                    CheckoutView(selectedProducts: $selectedProducts, quantities: $quantities)
+                }
+
             }
         }
     }
@@ -171,3 +171,4 @@ struct DeleteButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
