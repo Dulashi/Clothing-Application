@@ -10,6 +10,8 @@
 		BA0966AC2BB407CA00B6D322 /* CheckoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0966AB2BB407CA00B6D322 /* CheckoutView.swift */; };
 		BA0966AF2BB52BB900B6D322 /* OrdersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0966AE2BB52BB900B6D322 /* OrdersModel.swift */; };
 		BA0966B12BB52CDE00B6D322 /* OrdersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0966B02BB52CDE00B6D322 /* OrdersViewModel.swift */; };
+		BA0966B32BB545FB00B6D322 /* CreateAccountModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0966B22BB545FB00B6D322 /* CreateAccountModel.swift */; };
+		BA0966B52BB5466E00B6D322 /* CreateAccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA0966B42BB5466E00B6D322 /* CreateAccountViewModel.swift */; };
 		BA18B1B22BA973A5009ADDE9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B12BA973A5009ADDE9 /* LoginView.swift */; };
 		BA18B1B42BA973B6009ADDE9 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B32BA973B6009ADDE9 /* AccountView.swift */; };
 		BA18B1B62BA973D2009ADDE9 /* CreateAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */; };
@@ -50,6 +52,8 @@
 		BA0966AB2BB407CA00B6D322 /* CheckoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutView.swift; sourceTree = "<group>"; };
 		BA0966AE2BB52BB900B6D322 /* OrdersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersModel.swift; sourceTree = "<group>"; };
 		BA0966B02BB52CDE00B6D322 /* OrdersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersViewModel.swift; sourceTree = "<group>"; };
+		BA0966B22BB545FB00B6D322 /* CreateAccountModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountModel.swift; sourceTree = "<group>"; };
+		BA0966B42BB5466E00B6D322 /* CreateAccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewModel.swift; sourceTree = "<group>"; };
 		BA18B1B12BA973A5009ADDE9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		BA18B1B32BA973B6009ADDE9 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountView.swift; sourceTree = "<group>"; };
@@ -117,6 +121,7 @@
 			children = (
 				BA18B1BF2BABED9D009ADDE9 /* ProductViewModel.swift */,
 				BA0966B02BB52CDE00B6D322 /* OrdersViewModel.swift */,
+				BA0966B42BB5466E00B6D322 /* CreateAccountViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -126,6 +131,7 @@
 			children = (
 				BA18B1BB2BABED2B009ADDE9 /* ProductListsModel.swift */,
 				BA0966AE2BB52BB900B6D322 /* OrdersModel.swift */,
+				BA0966B22BB545FB00B6D322 /* CreateAccountModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -325,9 +331,11 @@
 				BA0966AF2BB52BB900B6D322 /* OrdersModel.swift in Sources */,
 				BAB1EE992BB1BF63007C202B /* ProductDetailView.swift in Sources */,
 				BA0966B12BB52CDE00B6D322 /* OrdersViewModel.swift in Sources */,
+				BA0966B32BB545FB00B6D322 /* CreateAccountModel.swift in Sources */,
 				BAD407E32B9C4B4500829528 /* Item.swift in Sources */,
 				BA18B1BC2BABED2B009ADDE9 /* ProductListsModel.swift in Sources */,
 				BA18B1BE2BABED48009ADDE9 /* ProductListsView.swift in Sources */,
+				BA0966B52BB5466E00B6D322 /* CreateAccountViewModel.swift in Sources */,
 				BA18B1C02BABED9D009ADDE9 /* ProductViewModel.swift in Sources */,
 				BA0966AC2BB407CA00B6D322 /* CheckoutView.swift in Sources */,
 				BA18B1B22BA973A5009ADDE9 /* LoginView.swift in Sources */,
