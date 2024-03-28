@@ -125,9 +125,9 @@ struct CheckoutView: View {
                     Spacer()
                 }
                 .navigationBarItems(trailing:
-                    Button("Close") {
-                        // Action to close the CheckoutView
-                    }
+                                        Button("Close") {
+                    // Action to close the CheckoutView
+                }
                 )
                 .onAppear {
                     // Load images when the view appears
@@ -184,6 +184,24 @@ struct CheckoutView: View {
     }
     
     private func placeOrder() {
-        showAlert = true // Show the confirmation alert
+        let order = Order(orderNumber: 1, // Auto-generated order number
+                          fullName: fullName,
+                          email: email,
+                          country: selectedCountry,
+                          streetAddress: streetAddress,
+                          city: city,
+                          postalCode: postalCode,
+                          items: selectedProducts.map { $0.name }, // Names of items
+                          totalNumberOfItems: totalNumberOfItems,
+                          totalAmount: totalPrice)
+        
+        let apiClient = OrderAPIClient()
+        apiClient.placeOrder(order: order) { error in
+            if let error = error {
+                print("Error placing order: \(error.localizedDescription)")
+            } else {
+                showAlert = true // Show the confirmation alert
+            }
+        }
     }
 }

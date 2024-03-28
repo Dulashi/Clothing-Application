@@ -11,7 +11,7 @@ class ProductViewModel: ObservableObject {
     @Published var products: [Product] = []
 
     func fetchProducts(completion: @escaping ([Product]?, Error?) -> Void) {
-        guard let url = URL(string: "http://localhost:3009/api/products") else {
+        guard let url = URL(string: "http://localhost:3000/api/products") else {
             completion(nil, NSError(domain: "Invalid URL", code: 0, userInfo: nil))
             return
         }

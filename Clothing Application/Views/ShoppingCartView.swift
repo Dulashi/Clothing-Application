@@ -1,3 +1,10 @@
+//
+//  ShoppingCartView.swift
+//  Clothing Application
+//
+//  Created by Ashini Dulashi on 2024-03-25.
+//
+
 import SwiftUI
 
 struct ShoppingCartView: View {
