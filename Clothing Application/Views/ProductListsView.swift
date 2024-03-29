@@ -63,7 +63,6 @@ struct ProductListsView: View {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(viewModel.products, id: \.name) { product in
                             ProductItemView(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
-// Pass cartItemsCount and selectedProducts
                         }
                     }
                     .padding()

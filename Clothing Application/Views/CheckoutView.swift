@@ -22,6 +22,8 @@ struct CheckoutView: View {
     
     let countries = ["Select Country", "USA", "Canada", "UK", "Australia", "Sri Lanka", "France", "Japan", "India", "China"]
     
+    @State private var nextOrderNumber = 1 // Initialize the order number counter
+    
     init(selectedProducts: Binding<[Product]>, quantities: Binding<[Int]>) {
         self._selectedProducts = selectedProducts
         self._quantities = quantities
@@ -184,14 +186,14 @@ struct CheckoutView: View {
     }
     
     private func placeOrder() {
-        let order = Order(orderNumber: 1, // Auto-generated order number
+        let order = Order(orderNumber: nextOrderNumber,
                           fullName: fullName,
                           email: email,
                           country: selectedCountry,
                           streetAddress: streetAddress,
                           city: city,
                           postalCode: postalCode,
-                          items: selectedProducts.map { $0.name }, // Names of items
+                          items: selectedProducts.map { $0.name },
                           totalNumberOfItems: totalNumberOfItems,
                           totalAmount: totalPrice)
         
@@ -201,6 +203,7 @@ struct CheckoutView: View {
                 print("Error placing order: \(error.localizedDescription)")
             } else {
                 showAlert = true // Show the confirmation alert
+                nextOrderNumber += 1 // Increment the order number
             }
         }
     }
