@@ -26,17 +26,27 @@ struct ProductDetailView: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView {
+            
                 VStack(alignment: .leading, spacing: 20) {
-                    // Image
                     if let imageUrl = product.imageUrls.first,
-                       let url = URL(string: imageUrl) {
-                        AsyncImage(url: url)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 250, height: 250)
-                            .cornerRadius(20)
-                            .padding(.horizontal)
-                    }
-                    
+                                   let url = URL(string: imageUrl) {
+                                    AsyncImage(url: url) { phase in
+                                        if let image = phase.image {
+                                            image
+                                                .resizable() // Allow image to be resizable
+                                                .aspectRatio(contentMode: .fit) // Maintain aspect ratio
+                                        } else if phase.error != nil {
+                                            // Handle error
+                                            Text("Failed to load image")
+                                        } else {
+                                            // Placeholder while loading
+                                            ProgressView()
+                                        }
+                                    }
+                                    .frame(width: 600, height: 500) // Set a fixed size for the frame
+                                    .cornerRadius(20)
+                                    .padding(.horizontal, -105)
+                                }
                     // Name
                     Text(product.name)
                         .font(.title)
@@ -93,7 +103,7 @@ struct ProductDetailView: View {
                                                 .foregroundColor(Color(color))
                                                 .frame(width: 30, height: 30)
                                             
-                                            Text(color) // Display color names inside oval shapes
+                                            Text(color)
                                                 .foregroundColor(.black)
                                                 .font(.caption)
                                         }
@@ -111,17 +121,16 @@ struct ProductDetailView: View {
                     
                     // Add to Cart Button
                     Button(action: {
-                        // Add selected product to the shopping cart
                         if let selectedSize = selectedSize, let selectedColor = selectedColor {
                             let selectedProduct = Product(
                                 name: product.name,
-                                category: "", // Provide the appropriate category value here
+                                category: "",
                                 price: product.price,
                                 sizes: [selectedSize],
                                 colors: [selectedColor],
-                                description: "", // Provide the appropriate description value here
+                                description: "",
                                 imageUrls: product.imageUrls,
-                                available: true // Set the availability of the product as needed
+                                available: true
                             )
                             cartItemsCount += 1
                             selectedProducts.append(selectedProduct)

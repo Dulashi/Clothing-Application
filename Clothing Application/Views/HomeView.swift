@@ -11,6 +11,8 @@ struct HomeView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var cartItemsCount = 0
     @State private var selectedProducts: [Product] = []
+    @State private var searchText = ""
+    @State private var isSearching = false
     
     var body: some View {
         NavigationView {
@@ -59,7 +61,21 @@ struct HomeView: View {
                         
                         Spacer()
                         
-                        SearchBar()
+                        HStack {
+                                                    Image(systemName: "magnifyingglass")
+                                                        .foregroundColor(.gray)
+                                                        .font(.system(size: 15))
+                                                        .padding(.leading, 5)
+                                                    TextField("Search Products", text: $searchText, onEditingChanged: { editing in
+                                                        isSearching = editing
+                                                    })
+                                                    .padding(.vertical, 10)
+                                                    .padding(.horizontal, 5)
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 14))
+                                                    Spacer()
+                                                }
+                                                .padding(.horizontal)
                         
                         Image("banner1_home")
                             .resizable()
@@ -209,29 +225,14 @@ struct HomeView: View {
                 BottomNavigationPanel()
             }
             .edgesIgnoringSafeArea(.bottom)
-        }
-    }
-}
-
-struct SearchBar: View {
-    @State private var searchText = ""
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
-                .font(.system(size: 15))
-                .padding(.leading, 5)
-            TextField("Search Products", text: $searchText)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 5)
-                .foregroundColor(.black)
-                .font(.system(size: 14))
-            Spacer()
-        }
-        .padding(.horizontal)
-    }
-}
+            .onAppear {
+                            viewModel.fetchProducts { _, _ in }
+                        }
+                        .navigationBarHidden(true)
+                        .navigationBarTitleDisplayMode(.inline)
+                    }
+                }
+            }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

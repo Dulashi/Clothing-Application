@@ -16,7 +16,7 @@ struct CreateAccountView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     
-    // Instantiate UserAPIClient
+   
     let userAPIClient = UserAPIClient()
     
     var body: some View {
@@ -67,7 +67,7 @@ struct CreateAccountView: View {
     }
     
     func createAccount() {
-        // Basic validation checks
+        
         guard !firstName.isEmpty else {
             alertMessage = "Please enter your first name."
             showAlert = true
@@ -93,17 +93,15 @@ struct CreateAccountView: View {
             showAlert = true
             return
         }
-        
-        // Create a User object with the entered data
+     
         let newUser = User(firstName: firstName, lastName: lastName, email: email, password: password)
         
-        // Call the API to save the user data
+       
         userAPIClient.createUser(user: newUser) { error in
             if let error = error {
                 alertMessage = "Error: \(error.localizedDescription)"
                 showAlert = true
             } else {
-                // Optionally, perform navigation or other actions upon successful account creation
                 print("User account created successfully")
             }
         }
