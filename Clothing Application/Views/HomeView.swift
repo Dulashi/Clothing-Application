@@ -224,7 +224,7 @@ struct HomeView: View {
 
                 BottomNavigationPanel()
             }
-            .edgesIgnoringSafeArea(.bottom)
+           
             .onAppear {
                             viewModel.fetchProducts { _, _ in }
                         }

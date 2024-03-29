@@ -20,28 +20,11 @@
 //        ContentView()
 //   }
 //}
-import SwiftUI
-
-struct ContentView: View {
-    var body: some View {
-       LoginView()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
 //import SwiftUI
 //
 //struct ContentView: View {
 //    var body: some View {
-//        NavigationView {
-//            // Your content view with BottomNavigationPanel
-//            BottomNavigationPanel()
-//        }
+//       LoginView()
 //    }
 //}
 //
@@ -50,3 +33,20 @@ struct ContentView_Previews: PreviewProvider {
 //        ContentView()
 //    }
 //}
+
+import SwiftUI
+
+struct ContentView: View {
+   var body: some View {
+        NavigationView {
+            // Your content view with BottomNavigationPanel
+            BottomNavigationPanel()
+        }
+   }
+}
+
+struct ContentView_Previews: PreviewProvider {
+   static var previews: some View {
+        ContentView()
+   }
+}
