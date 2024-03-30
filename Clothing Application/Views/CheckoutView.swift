@@ -21,6 +21,7 @@ struct CheckoutView: View {
     @State private var expiryDate = ""
     @State private var showAlert = false
     @State private var nextOrderNumber = 1
+    @State private var password = ""
 
     init(selectedProducts: Binding<[Product]>, quantities: Binding<[Int]>) {
         self._selectedProducts = selectedProducts
@@ -138,13 +139,14 @@ struct CheckoutView: View {
                     Alert(title: Text("Order Confirmation"), message: Text("Your Order has been confirmed"), primaryButton: .default(Text("OK")), secondaryButton: .cancel())
                 }
                 .background(
-                    NavigationLink(destination: AccountView(), isActive: $showAlert) {
+                    NavigationLink(destination: AccountView(email: email, password: password), isActive: $showAlert) {
                         EmptyView()
                     }
                     .hidden()
                 )
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 
     var totalPrice: Double {

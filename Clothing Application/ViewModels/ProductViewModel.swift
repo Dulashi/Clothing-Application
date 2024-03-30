@@ -15,6 +15,14 @@ class ProductViewModel: ObservableObject {
             completion(nil, NSError(domain: "Invalid URL", code: 0, userInfo: nil))
             return
         }
+        
+        func fetchWishlistProducts() {
+                // Fetch wishlist products from WishlistManager
+            let wishlistProducts = WishlistManager.shared.fetchWishlistProducts()
+                    // Update the products array with wishlist products
+                    self.products = wishlistProducts
+
+            }
 
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {

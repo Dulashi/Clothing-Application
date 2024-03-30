@@ -148,6 +148,7 @@ struct ShoppingCartView: View {
 
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
     
     private func loadImage(for index: Int) {

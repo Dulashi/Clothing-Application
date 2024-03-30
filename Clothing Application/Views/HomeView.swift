@@ -14,6 +14,9 @@ struct HomeView: View {
     @State private var searchText = ""
     @State private var isSearching = false
     @State private var searchSuggestions: [Product] = []
+    @State private var email = ""
+    @State private var password = ""
+    
     
     var body: some View {
         NavigationView {
@@ -73,6 +76,7 @@ struct HomeView: View {
                         }
                         .padding(.horizontal)
                         
+
                         if isSearching {
                             ForEach(searchSuggestions, id: \.id) { product in
                                 NavigationLink(destination: ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)) {
@@ -242,9 +246,10 @@ struct HomeView: View {
                     filterProducts()
                 }
                 
-                BottomNavigationPanel()
+                BottomNavigationPanel(email: email, password: password)
             }
             .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

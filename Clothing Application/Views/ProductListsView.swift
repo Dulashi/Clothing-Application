@@ -12,6 +12,8 @@ struct ProductListsView: View {
     @State private var isShowingSortOptions = false
     @State private var cartItemsCount = 0 // State to track cart items count
     @State private var selectedProducts: [Product] = [] // State to track selected products
+    @State private var password = ""
+    @State private var email = ""
     
     var body: some View {
         NavigationView {
@@ -81,7 +83,7 @@ struct ProductListsView: View {
                     }
                 }
                 
-                BottomNavigationPanel()
+                BottomNavigationPanel(email: email, password: password)
             }
         }
         .navigationBarHidden(true)
@@ -99,19 +101,24 @@ struct ProductItemView: View {
     @State private var isShowingDetail = false
     @Binding var selectedProducts: [Product]
     @State private var isShowingPopup = false
-  
+    @State private var isWishlisted = false // New state to track wishlist status
     
     var body: some View {
         VStack {
-
             if let imageData = imageData,
                let uiImage = UIImage(data: imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 250, height: 250)
-                    .cornerRadius(30)
-                    .overlay(
+                ZStack(alignment: .bottomLeading) { // Stack for image and buttons
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 250, height: 250)
+                        .cornerRadius(30)
+                        .onTapGesture {
+                            isShowingDetail = true // Present detail view when tapped
+                        }
+                    
+                    HStack {
+                        Spacer()
                         Button(action: {
                             isShowingPopup = true
                         }) {
@@ -122,12 +129,38 @@ struct ProductItemView: View {
                                 .clipShape(Circle())
                                 .padding(8)
                         }
-                        .offset(x: -40, y: 0),
-                        alignment: .topTrailing
-                    )
-                    .onTapGesture {
-                        isShowingDetail = true // Present detail view when tapped
+                        .offset(x: 150, y: -190)
+                        
+                        HStack {
+                            Spacer()
+                            VStack { // ContentView for heart button
+                                Button(action: {
+                                    isWishlisted.toggle()
+                                    if isWishlisted {
+                                        // Add product to wishlist
+                                        saveToWishlist()
+                                    } else {
+                                        // Remove product from wishlist
+                                        removeFromWishlist()
+                                    }
+                                }) {
+                                    Image(systemName: isWishlisted ? "heart.fill" : "heart")
+                                        .foregroundColor(isWishlisted ? .white: .black)
+                                        .padding(20)
+                                        .clipShape(Circle())
+                                        .font(.system(size: 23))
+                                }
+                            }
+                            .frame(maxWidth: .infinity)
+                            .offset(x: 10, y: -1)
+                            
+                            
+                            .offset(x: 20, y: 10)
+                            .background(Color.clear)
+                            
+                        }
                     }
+                }
             } else {
                 Color.gray
                     .frame(width: 200, height: 200)
@@ -157,7 +190,7 @@ struct ProductItemView: View {
                 // Action when heart button is tapped
             }) {
                 // Image(systemName: "heart")
-                //   .foregroundColor(.black)
+                //  .foregroundColor(.black)
                 // .offset(x: 60, y: -20);
             }
             .frame(width: 170)
@@ -166,14 +199,14 @@ struct ProductItemView: View {
             .cornerRadius(10)
         }
         .sheet(isPresented: $isShowingDetail) {
-                    ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
+            ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
         }
-
+        
         .sheet(isPresented: $isShowingPopup) {
             ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
         }
+        .navigationBarBackButtonHidden(true)
     }
-
     
     private func loadImage() {
         guard let firstImageUrl = product.imageUrls.first,
@@ -191,7 +224,17 @@ struct ProductItemView: View {
             }
         }.resume()
     }
+    
+    private func saveToWishlist() {
+        WishlistManager.shared.addToWishlist(name: product.name, price: product.price, imageUrls: product.imageUrls)
+    }
+    
+    private func removeFromWishlist() {
+        WishlistManager.shared.removeFromWishlist(product.name)
+    }
+    
 }
+
 
 
 struct ProductSelectionPopup: View {
@@ -330,7 +373,6 @@ struct ProductSelectionPopup: View {
         }.resume()
     }
 }
-
 
     struct SortOptionsView: View {
         var body: some View {

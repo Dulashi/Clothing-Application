@@ -10,6 +10,14 @@ import SwiftUI
 struct BottomNavigationPanel: View {
     @State private var cartItemsCount: Int = 0
     
+    let email: String
+        let password: String
+        
+        init(email: String, password: String) {
+            self.email = email
+            self.password = password
+        }
+    
     var body: some View {
         HStack {
             Spacer()
@@ -25,7 +33,7 @@ struct BottomNavigationPanel: View {
                 }
             }
             Spacer()
-            NavigationLink(destination: AccountView()) {
+            NavigationLink(destination: AccountView(email: email, password: password)) {
                 ZStack(alignment: .top) {
                     Image(systemName: "person")
                         .padding()
@@ -65,11 +73,5 @@ struct BottomNavigationPanel: View {
         .frame(height: 50)
         .background(Color.white)
         .edgesIgnoringSafeArea(.bottom)
-    }
-}
-
-struct BottomNavigationPanel_Previews: PreviewProvider {
-    static var previews: some View {
-        BottomNavigationPanel()
     }
 }
