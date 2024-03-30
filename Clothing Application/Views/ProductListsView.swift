@@ -4,7 +4,9 @@
 //
 //  Created by Ashini Dulashi on 2024-03-21.
 //
+
 import SwiftUI
+
 struct ProductListsView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var isShowingSortOptions = false
@@ -12,83 +14,96 @@ struct ProductListsView: View {
     @State private var selectedProducts: [Product] = [] // State to track selected products
     
     var body: some View {
-        NavigationView { // Wrap content in NavigationView
-            ScrollView {
-                VStack {
-                    // Header
-                    HStack {
-                        Button(action: {
-                            // Handle back button action
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .padding()
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        Text("DRESSES")
-                            .font(.title)
-                            .fontWeight(.medium)
-                        Spacer()
-                        NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts)) {
-                            ZStack {
-                                Image(systemName: "cart")
+        NavigationView {
+            VStack {
+                ScrollView {
+                    VStack {
+                        // Header
+                        HStack {
+                            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount)) {
+                                Image(systemName: "chevron.left")
                                     .padding()
                                     .foregroundColor(.gray)
-                                if cartItemsCount > 0 { // Show cart items count if greater than 0
-                                    Text("\(cartItemsCount)")
-                                        .foregroundColor(.white)
-                                        .frame(width: 20, height: 20)
-                                        .background(Color.black)
-                                        .clipShape(Circle())
-                                        .offset(x: 10, y: -10)
+                            }
+                            Spacer()
+                            Text("DRESSES")
+                                .font(.title)
+                                .fontWeight(.medium)
+                            Spacer()
+                            NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts)) {
+                                ZStack {
+                                    Image(systemName: "cart")
+                                        .padding()
+                                        .foregroundColor(.gray)
+                                    if cartItemsCount > 0 { // Show cart items count if greater than 0
+                                        Text("\(cartItemsCount)")
+                                            .foregroundColor(.white)
+                                            .frame(width: 20, height: 20)
+                                            .background(Color.black)
+                                            .clipShape(Circle())
+                                            .offset(x: 10, y: -10)
+                                    }
                                 }
                             }
                         }
-                    }
-                    .padding(.horizontal)
-                    
-                    HStack {
-                        Spacer()
+                        .padding(.horizontal)
+                        
                         Button(action: {
                             isShowingSortOptions.toggle()
                         }) {
-                            Text("Sort | Filter")
-                                .foregroundColor(.gray)
-                                .padding(.horizontal)
+                            ZStack {
+                                Rectangle()
+                                    .foregroundColor(Color.gray.opacity(0.1))
+                                    .frame(height: 40)
+                                    .cornerRadius(10)
+                                
+                                HStack {
+                                    Spacer()
+                                    Text("Sort & Filter")
+                                        .foregroundColor(.gray)
+                                        .padding(.horizontal)
+                                    Spacer()
+                                }
+                            }
                         }
-                        Spacer()
-                    }
-                    
-                    let columns = [GridItem(.flexible()), GridItem(.flexible())]
-                    LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(viewModel.products, id: \.name) { product in
-                            ProductItemView(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
+                        .padding(.horizontal)
+
+                        let columns = [GridItem(.flexible()), GridItem(.flexible())]
+                        LazyVGrid(columns: columns, spacing: 20) {
+                            ForEach(viewModel.products, id: \.name) { product in
+                                ProductItemView(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
+                            }
                         }
-                    }
-                    .padding()
-                    .onAppear {
-                        viewModel.fetchProducts { _, _ in }
+                        .padding()
+                        .onAppear {
+                            viewModel.fetchProducts { _, _ in }
+                        }
                     }
                 }
-                .sheet(isPresented: $isShowingSortOptions, content: {
-                    SortOptionsView()
-                })
+                
+                BottomNavigationPanel()
             }
+        }
+        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isShowingSortOptions) {
+            SortOptionsView()
         }
     }
 }
+
 struct ProductItemView: View {
     let product: Product
     @Binding var cartItemsCount: Int
     @State private var imageData: Data? = nil
-    @State private var isShowingDetail = false // Add state to control detail view presentation
+    @State private var isShowingDetail = false
     @Binding var selectedProducts: [Product]
     @State private var isShowingPopup = false
   
     
     var body: some View {
         VStack {
-            // Product image or placeholder
+
             if let imageData = imageData,
                let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
@@ -150,17 +165,15 @@ struct ProductItemView: View {
             .background(Color.white)
             .cornerRadius(10)
         }
-
         .sheet(isPresented: $isShowingDetail) {
-            ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
+                    ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
         }
-
-
 
         .sheet(isPresented: $isShowingPopup) {
             ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
         }
     }
+
     
     private func loadImage() {
         guard let firstImageUrl = product.imageUrls.first,
@@ -179,6 +192,8 @@ struct ProductItemView: View {
         }.resume()
     }
 }
+
+
 struct ProductSelectionPopup: View {
     let product: Product
     @Binding var cartItemsCount: Int
@@ -315,6 +330,8 @@ struct ProductSelectionPopup: View {
         }.resume()
     }
 }
+
+
     struct SortOptionsView: View {
         var body: some View {
             VStack {
@@ -431,3 +448,5 @@ struct ProductSelectionPopup: View {
             return false
         }
     }
+    
+

@@ -11,11 +11,12 @@ struct Order: Codable {
     let orderNumber: Int
     let fullName: String
     let email: String
-    let country: String
     let streetAddress: String
     let city: String
     let postalCode: String
-    let items: [String] 
+    let items: [String]
     let totalNumberOfItems: Int
     let totalAmount: Double
+    let cvc: String
+    let expiryDate: String
 }

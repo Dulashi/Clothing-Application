@@ -9,75 +9,76 @@ import SwiftUI
 
 struct CheckoutView: View {
     @Binding var selectedProducts: [Product]
-    @Binding var quantities: [Int] // Binding for quantities
-    @State private var imageDatas: [Data?] // State to store image data
+    @Binding var quantities: [Int]
+    @State private var imageDatas: [Data?]
     @State private var email = ""
     @State private var fullName = ""
     @State private var streetAddress = ""
     @State private var city = ""
     @State private var postalCode = ""
-    @State private var selectedCountry = "Select Country"
     @State private var paymentNumber = ""
+    @State private var cvc = ""
+    @State private var expiryDate = ""
     @State private var showAlert = false
-    
-    let countries = ["Select Country", "USA", "Canada", "UK", "Australia", "Sri Lanka", "France", "Japan", "India", "China"]
-    
-    @State private var nextOrderNumber = 1 // Initialize the order number counter
-    
+    @State private var nextOrderNumber = 1
+
     init(selectedProducts: Binding<[Product]>, quantities: Binding<[Int]>) {
         self._selectedProducts = selectedProducts
         self._quantities = quantities
         self._imageDatas = State(initialValue: Array(repeating: nil, count: selectedProducts.wrappedValue.count))
     }
-    
+
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack {
+                VStack(spacing: 20) {
                     Text("Checkout")
                         .font(.title)
-                        .padding()
-                    
-                    // Shipping section
-                    Section("Shipping") {
-                        TextField("Email", text: $email)
-                            .padding()
-                        TextField("Full Name", text: $fullName)
-                            .padding()
-                        TextField("Street Address", text: $streetAddress)
-                            .padding()
-                        TextField("City", text: $city)
-                            .padding()
-                        TextField("Postal Code", text: $postalCode)
-                            .padding()
-                        Picker(selection: $selectedCountry, label: Text("Country")) {
-                            ForEach(countries, id: \.self) { country in
-                                Text(country)
-                            }
+                    HStack {
+                        Label("Delivery Information", systemImage: "shippingbox.fill")
+                            .foregroundColor(.orange)
+                        Spacer()
+                    }
+                    .padding(.top)
+                    Section {
+                        VStack(alignment: .leading) {
+                            CustomTextField(text: $email, placeholder: "Email")
+                            CustomTextField(text: $fullName, placeholder: "Full Name")
+                            CustomTextField(text: $streetAddress, placeholder: "Street Address")
+                            CustomTextField(text: $city, placeholder: "City")
+                            CustomTextField(text: $postalCode, placeholder: "Postal Code")
                         }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding()
+                    }
+                    HStack {
+                        Label("Payment", systemImage: "creditcard.fill")
+                            .foregroundColor(.orange)
+                        Spacer()
+                    }
+                    Section {
+                        VStack(alignment: .leading) {
+                            CustomTextField(text: $paymentNumber, placeholder: "Payment Number")
+                                .keyboardType(.numberPad)
+                            SecureField("CVC", text: $cvc)
+                                .keyboardType(.numberPad)
+                            CustomTextField(text: $expiryDate, placeholder: "Expiry Date (MM/YY)")
+                                .keyboardType(.numberPad)
+                        }
                     }
                     
-                    // Payment section
-                    Section("Payment") {
-                        TextField("Payment Number", text: $paymentNumber)
-                            .padding()
-                    }
                     
-                    // Summary section
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Summary")
                             .font(.headline)
+                            .foregroundColor(.orange)
                         HStack {
                             Text("Subtotal:")
                             Spacer()
                             Text("LKR \(String(format: "%.2f", totalPrice))")
                         }
                         HStack {
-                            Text("Shipping Tax:")
+                            Text("Extra Tax:")
                             Spacer()
-                            Text("LKR 0.00") // Shipping tax is zero for now
+                            Text("LKR 0.00")
                         }
                         HStack {
                             Text("Number of Items:")
@@ -90,9 +91,7 @@ struct CheckoutView: View {
                             Text("LKR \(String(format: "%.2f", totalPrice))")
                         }
                     }
-                    .padding()
                     
-                    // Place the Order button
                     Button(action: placeOrder) {
                         Text("Place the Order")
                             .foregroundColor(.white)
@@ -100,9 +99,8 @@ struct CheckoutView: View {
                             .background(Color.black)
                             .cornerRadius(8)
                     }
-                    .padding()
                     
-                    // Product images grid
+                    // Product Images Grid
                     ScrollView(.horizontal) {
                         LazyHGrid(rows: [GridItem(.flexible())], spacing: 10) {
                             ForEach(selectedProducts.indices, id: \.self) { index in
@@ -124,13 +122,12 @@ struct CheckoutView: View {
                         .padding()
                     }
                     
-                    Spacer()
+                    Image("banner2_home")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(height: 300)
                 }
-                .navigationBarItems(trailing:
-                                        Button("Close") {
-                    // Action to close the CheckoutView
-                }
-                )
+                .padding()
                 .onAppear {
                     // Load images when the view appears
                     for index in selectedProducts.indices {
@@ -138,16 +135,18 @@ struct CheckoutView: View {
                     }
                 }
                 .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Order Confirmation"), message: Text("Your Order has been confirmed"), primaryButton: .default(Text("OK"), action: {
-                        // Action when OK button is tapped
-                        // Navigate to HomeView
-                        // You need to define the navigation logic to go to HomeView
-                    }), secondaryButton: .cancel())
+                    Alert(title: Text("Order Confirmation"), message: Text("Your Order has been confirmed"), primaryButton: .default(Text("OK")), secondaryButton: .cancel())
                 }
+                .background(
+                    NavigationLink(destination: AccountView(), isActive: $showAlert) {
+                        EmptyView()
+                    }
+                    .hidden()
+                )
             }
         }
     }
-    
+
     var totalPrice: Double {
         var total: Double = 0.0
         for (index, product) in selectedProducts.enumerated() {
@@ -155,7 +154,7 @@ struct CheckoutView: View {
         }
         return total
     }
-    
+
     var totalNumberOfItems: Int {
         var totalItems = 0
         for quantity in quantities {
@@ -163,18 +162,18 @@ struct CheckoutView: View {
         }
         return totalItems
     }
-    
+
     private func loadImage(for index: Int) {
         guard let imageUrl = selectedProducts[index].imageUrls.first,
               let url = URL(string: imageUrl) else {
             return
         }
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 return
             }
-            
+
             DispatchQueue.main.async {
                 // Make sure the imageDatas array has enough elements
                 while index >= imageDatas.count {
@@ -184,26 +183,44 @@ struct CheckoutView: View {
             }
         }.resume()
     }
-    
+
+    struct CustomTextField: View {
+        @Binding var text: String
+        var placeholder: String
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 0) {
+                TextField(placeholder, text: $text)
+                    .padding(.vertical, 8)
+                    .background(
+                        Rectangle().foregroundColor(.clear)
+                            .frame(height: 1)
+                            .padding(.top, 16) // Adjust this value to control the spacing between text and line
+                    )
+            }
+        }
+    }
+
     private func placeOrder() {
         let order = Order(orderNumber: nextOrderNumber,
                           fullName: fullName,
                           email: email,
-                          country: selectedCountry,
                           streetAddress: streetAddress,
                           city: city,
                           postalCode: postalCode,
                           items: selectedProducts.map { $0.name },
                           totalNumberOfItems: totalNumberOfItems,
-                          totalAmount: totalPrice)
+                          totalAmount: totalPrice,
+                          cvc: cvc,
+                          expiryDate: expiryDate)
         
         let apiClient = OrderAPIClient()
         apiClient.placeOrder(order: order) { error in
             if let error = error {
                 print("Error placing order: \(error.localizedDescription)")
             } else {
-                showAlert = true // Show the confirmation alert
-                nextOrderNumber += 1 // Increment the order number
+                showAlert = true
+                nextOrderNumber += 1
             }
         }
     }

@@ -30,6 +30,12 @@ struct ShoppingCartView: View {
                     .font(.title)
                     .padding()
                 
+                                   Image("shoppingcartbanner")
+                                       .resizable()
+                                       .aspectRatio(contentMode: .fit)
+                                       .frame(width: 600, height: 150)
+                                       .padding(.leading, 8)
+                
                 if selectedProducts.isEmpty {
                     Text("No items in the shopping cart")
                         .foregroundColor(.gray)
@@ -48,63 +54,81 @@ struct ShoppingCartView: View {
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 100, height: 100) // Adjust image size as needed
+                                        .frame(width: 80, height: 80) // Adjust image size as needed
                                         .cornerRadius(5)
                                 } else {
                                     Color.gray
-                                        .frame(width: 50, height: 50)
+                                        .frame(width: 80, height: 80) // Adjust placeholder size
                                         .cornerRadius(5)
                                 }
                                 
                                 // Product details
                                 VStack(alignment: .leading) {
                                     Text(product.name)
-                                        .font(.headline)
+                                        .font(.system(size: 14))
                                     
-                                    Text("Price: LKR \(String(format: "%.2f", product.price))")
+                                    Text("LKR \(String(format: "%.2f", product.price))")
                                         .foregroundColor(.gray)
+                                        .font(.system(size: 14))
                                     
                                     Text("Size: \(product.sizes.first ?? "N/A")")
                                         .foregroundColor(.gray)
+                                        .font(.system(size: 14))
                                     
                                     Text("Color: \(product.colors.first ?? "N/A")")
                                         .foregroundColor(.gray)
+                                        .font(.system(size: 14))
                                     
-                                    // Quantity selection
-                                    Picker("Quantity", selection: Binding(
-                                        get: { quantity },
-                                        set: { quantities[index] = $0 }
-                                    )) {
-                                        ForEach(1...100, id: \.self) { quantity in
-                                            Text("\(quantity)")
+                                    HStack {
+                                        // Quantity selection
+                                        Picker("Quantity", selection: Binding(
+                                            get: { quantity },
+                                            set: { quantities[index] = $0 }
+                                        )) {
+                                            ForEach(1...100, id: \.self) { quantity in
+                                                Text("\(quantity)")
+                                            }
+                                        }
+                                        .pickerStyle(MenuPickerStyle())
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 14))
+                                        
+                                        Spacer()
+                                        
+                                        // Delete button
+                                        DeleteButton {
+                                            deleteProduct(at: index)
                                         }
                                     }
-                                    .pickerStyle(MenuPickerStyle())
                                 }
-                                .padding(.vertical, 8)
+                                .padding(.trailing, 8) // Adjust trailing padding
                                 
-                                Spacer()
-                                
-                                // Delete button
-                                DeleteButton {
-                                    deleteProduct(at: index)
-                                }
                             }
+                            .padding(.vertical, 8)
                             .padding(.horizontal)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 2)
                             .onAppear {
                                 loadImage(for: index)
                                 ensureQuantityCount(for: index)
                             }
                         }
                     }
+                    .listStyle(PlainListStyle())
                 }
                 
                 Spacer()
                 
                 // Total price display
-                Text("Total: LKR \(String(format: "%.2f", totalPrice))")
-                    .font(.headline)
-                    .padding(.bottom)
+                HStack {
+                    Spacer()
+                    Text("Total: LKR \(String(format: "%.2f", totalPrice))")
+                        .font(.headline)
+                    Spacer()
+                }
+                .padding(.vertical)
                 
                 Button(action: {
                     // Show checkout sheet
@@ -119,7 +143,6 @@ struct ShoppingCartView: View {
                         .padding(.horizontal)
                 }
                 .sheet(isPresented: $isCheckoutSheetPresented) {
-                    // Present CheckoutView with selectedProducts and quantities
                     CheckoutView(selectedProducts: $selectedProducts, quantities: $quantities)
                 }
 
@@ -178,4 +201,3 @@ struct DeleteButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
