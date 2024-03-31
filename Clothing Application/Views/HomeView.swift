@@ -16,6 +16,7 @@ struct HomeView: View {
     @State private var searchSuggestions: [Product] = []
     @State private var email = ""
     @State private var password = ""
+  
     
     
     var body: some View {
@@ -24,7 +25,7 @@ struct HomeView: View {
                 ScrollView {
                     VStack {
                         HStack {
-                            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount)) {
+                            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount,email:email,password:password)) {
                                 Image(systemName: "line.horizontal.3")
                                     .padding()
                                     .foregroundColor(.gray)
@@ -33,8 +34,10 @@ struct HomeView: View {
                             Text("GlamCloth")
                                 .font(.title)
                                 .fontWeight(.bold)
+                            
+                            
                             Spacer()
-                            NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts)) {
+                            NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts,cartItemsCount: $cartItemsCount, email: email, password: password)) {
                                 ZStack {
                                     Image(systemName: "cart")
                                         .padding()
@@ -245,12 +248,12 @@ struct HomeView: View {
                     print("Search text changed:", newValue)
                     filterProducts()
                 }
-                
-                BottomNavigationPanel(email: email, password: password)
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                BottomNavigationPanel(selectedProducts: $selectedProducts, email: email, password: password)
             }
-            .navigationBarHidden(true)
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
+            
         }
     }
     
@@ -265,3 +268,5 @@ struct HomeView: View {
         }
     }
 }
+
+

@@ -6,24 +6,26 @@
 //
 
 import SwiftUI
+
 struct CollectionsView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var searchText = ""
     @State private var isSearching = false
     @State private var selectedProduct: Product? = nil // State to track selected product
     @State private var selectedProducts: [Product] = []
-    @State private var navigateToHome = false // State to control navigation to HomeView
     @State private var navigateToProductLists = false // State to control navigation to ProductListsView
     @Binding var cartItemsCount: Int
     
-    var body: some View {NavigationView {
+    let email: String
+    let password: String
+    
+    var body: some View {
         VStack {
             ScrollView(.vertical) {
                 VStack {
                     HStack {
                         Button(action: {
-                            // Navigate to HomeView when xmark icon is clicked
-                            navigateToHome = true
+                           
                         }) {
                             Image(systemName: "xmark")
                                 .resizable()
@@ -83,7 +85,6 @@ struct CollectionsView: View {
                                         }
                                     )
                                 }
-                                
                             }
                             .padding()
                         }
@@ -116,63 +117,69 @@ struct CollectionsView: View {
         }
         .background(
             NavigationLink(
-                destination: HomeView(), // Destination is HomeView
-                isActive: $navigateToHome, // Activate link based on state
-                label: { EmptyView() }
-            )
-        )
-        .background(
-            NavigationLink(
                 destination: ProductListsView(viewModel: viewModel), // Destination is ProductListsView
                 isActive: $navigateToProductLists, // Activate link based on state
                 label: { EmptyView() }
             )
         )
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        
+        if !navigateToProductLists {
+            BottomNavigationPanel(selectedProducts: $selectedProducts ,email: email, password: password)
+                .edgesIgnoringSafeArea(.bottom)
+        }
     }
-    .navigationBarBackButtonHidden(true)
-}
-
-        var filteredProducts: [Product] {
-            if searchText.isEmpty {
-                return []
-            } else {
-                return viewModel.products.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+    
+    var filteredProducts: [Product] {
+        if searchText.isEmpty {
+            return []
+        } else {
+            return viewModel.products.filter { $0.name.lowercased().contains(searchText.lowercased()) }
+        }
+    }
+    
+    
+    struct CollectionOptionView: View {
+        var title: String
+        @State private var isActive = false // State to control navigation activation
+        
+        var body: some View {
+            // Use NavigationLink for navigation
+            NavigationLink(
+                destination: ProductListsView(),
+                isActive: $isActive,
+                label: {
+                    HStack {
+                        Text(title)
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                })
+            .background(Color.black.opacity(0.8))
+            .cornerRadius(10)
+            .onTapGesture {
+                // Activate navigation when tapped
+                isActive = true
             }
         }
     }
-struct CollectionOptionView: View {
-    var title: String
-    @State private var isActive = false // State to control navigation activation
-
-    var body: some View {
-        // Use NavigationLink for navigation
-        NavigationLink(
-            destination: ProductListsView(),
-            isActive: $isActive,
-            label: {
-                HStack {
-                    Text(title)
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
-                }
-                .padding()
-            })
-        .background(Color.black.opacity(0.8))
-        .cornerRadius(10)
-        .onTapGesture {
-            // Activate navigation when tapped
-            isActive = true
+    
+    struct CollectionsView_Previews: PreviewProvider {
+        static var previews: some View {
+            let email = ""
+            let password = ""
+            let cartItemsCount = Binding.constant(0) // Provide a mock binding for cartItemsCount
+            return CollectionsView(cartItemsCount: cartItemsCount, email: email, password: password)
         }
     }
 }
 
-    struct CollectionsView_Previews: PreviewProvider {
-        static var previews: some View {
-            let cartItemsCount = Binding.constant(0) // Provide a mock binding for cartItemsCount
-            return CollectionsView(cartItemsCount: cartItemsCount)
-        }
-    }
+#Preview {
+    CollectionsView(cartItemsCount: .constant(0), email: "", password: "")
+}

@@ -21,7 +21,7 @@ struct CreateAccountView: View {
     
     var body: some View {
         VStack {
-            Text("My Account")
+            Text("Sign Up")
                 .font(.title)
                 .padding(.top, 50)
             

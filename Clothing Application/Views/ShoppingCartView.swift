@@ -11,8 +11,13 @@ struct ShoppingCartView: View {
     @Binding var selectedProducts: [Product]
     @State private var imageDatas: [Data?] = []
     @State private var quantities: [Int] = []
-    @State private var isCheckoutSheetPresented = false // State to control the presentation of the CheckoutView
+    @State private var isCheckoutSheetPresented = false
+    @Binding var cartItemsCount: Int
     
+    let email: String
+    let password: String
+    
+
     var totalPrice: Double {
         var total: Double = 0.0
         for index in 0..<selectedProducts.count {
@@ -22,20 +27,37 @@ struct ShoppingCartView: View {
         }
         return total
     }
-    
+
     var body: some View {
         NavigationView {
             VStack {
-                Text("Shopping Cart")
-                    .font(.title)
-                    .padding()
-                
-                                   Image("shoppingcartbanner")
-                                       .resizable()
-                                       .aspectRatio(contentMode: .fit)
-                                       .frame(width: 600, height: 150)
-                                       .padding(.leading, 8)
-                
+                HStack {
+                    Button(action: {
+                        
+                    }) {
+                        NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount, email: email, password: password)) {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 14, height: 14)
+                                .foregroundColor(.gray)
+                                .padding()
+                        }
+                    }
+                    Spacer()
+                    Text("My Cart")
+                        .font(.title)
+                        .padding()
+                    Spacer()
+                    Spacer()
+                }
+
+                Image("shoppingcartbanner")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 600, height: 150)
+                    .padding(.leading, 8)
+
                 if selectedProducts.isEmpty {
                     Text("No items in the shopping cart")
                         .foregroundColor(.gray)
@@ -46,7 +68,7 @@ struct ShoppingCartView: View {
                             let product = selectedProducts[index]
                             let imageData = index < imageDatas.count ? imageDatas[index] : nil
                             let quantity = index < quantities.count ? quantities[index] : 1
-                            
+
                             HStack(spacing: 10) {
                                 // Product image
                                 if let imageData = imageData,
@@ -61,24 +83,24 @@ struct ShoppingCartView: View {
                                         .frame(width: 80, height: 80) // Adjust placeholder size
                                         .cornerRadius(5)
                                 }
-                                
+
                                 // Product details
                                 VStack(alignment: .leading) {
                                     Text(product.name)
                                         .font(.system(size: 14))
-                                    
+
                                     Text("LKR \(String(format: "%.2f", product.price))")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 14))
-                                    
+
                                     Text("Size: \(product.sizes.first ?? "N/A")")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 14))
-                                    
+
                                     Text("Color: \(product.colors.first ?? "N/A")")
                                         .foregroundColor(.gray)
                                         .font(.system(size: 14))
-                                    
+
                                     HStack {
                                         // Quantity selection
                                         Picker("Quantity", selection: Binding(
@@ -92,9 +114,9 @@ struct ShoppingCartView: View {
                                         .pickerStyle(MenuPickerStyle())
                                         .foregroundColor(.black)
                                         .font(.system(size: 14))
-                                        
+
                                         Spacer()
-                                        
+
                                         // Delete button
                                         DeleteButton {
                                             deleteProduct(at: index)
@@ -102,7 +124,7 @@ struct ShoppingCartView: View {
                                     }
                                 }
                                 .padding(.trailing, 8) // Adjust trailing padding
-                                
+
                             }
                             .padding(.vertical, 8)
                             .padding(.horizontal)
@@ -118,9 +140,9 @@ struct ShoppingCartView: View {
                     }
                     .listStyle(PlainListStyle())
                 }
-                
+
                 Spacer()
-                
+
                 // Total price display
                 HStack {
                     Spacer()
@@ -129,7 +151,7 @@ struct ShoppingCartView: View {
                     Spacer()
                 }
                 .padding(.vertical)
-                
+
                 Button(action: {
                     // Show checkout sheet
                     isCheckoutSheetPresented = true
@@ -150,18 +172,18 @@ struct ShoppingCartView: View {
         }
         .navigationBarBackButtonHidden(true)
     }
-    
+
     private func loadImage(for index: Int) {
         guard let imageUrl = selectedProducts[index].imageUrls.first,
               let url = URL(string: imageUrl) else {
             return
         }
-        
+
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else {
                 return
             }
-            
+
             DispatchQueue.main.async {
                 // Make sure the imageDatas array has enough elements
                 while index >= imageDatas.count {
@@ -171,16 +193,16 @@ struct ShoppingCartView: View {
             }
         }.resume()
     }
-    
+
     private func ensureQuantityCount(for index: Int) {
         while quantities.count <= index {
             quantities.append(1) // Default quantity is 1
         }
     }
-    
+
     private func deleteProduct(at index: Int) {
         selectedProducts.remove(at: index)
-        
+
         // Remove corresponding image data and quantity
         if index < imageDatas.count {
             imageDatas.remove(at: index)
@@ -193,7 +215,7 @@ struct ShoppingCartView: View {
 
 struct DeleteButton: View {
     var action: () -> Void
-    
+
     var body: some View {
         Button(action: action) {
             Image(systemName: "trash")
@@ -201,4 +223,8 @@ struct DeleteButton: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
+}
+
+#Preview{
+    ShoppingCartView(selectedProducts: .constant([]), cartItemsCount: .constant(0), email: "", password: "")
 }

@@ -22,7 +22,7 @@ struct ProductListsView: View {
                     VStack {
                         // Header
                         HStack {
-                            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount)) {
+                            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount,email:email,password:password)) {
                                 Image(systemName: "chevron.left")
                                     .padding()
                                     .foregroundColor(.gray)
@@ -32,7 +32,7 @@ struct ProductListsView: View {
                                 .font(.title)
                                 .fontWeight(.medium)
                             Spacer()
-                            NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts)) {
+                            NavigationLink(destination: ShoppingCartView(selectedProducts: $selectedProducts,cartItemsCount: $cartItemsCount, email: email, password: password)) {
                                 ZStack {
                                     Image(systemName: "cart")
                                         .padding()
@@ -83,7 +83,7 @@ struct ProductListsView: View {
                     }
                 }
                 
-                BottomNavigationPanel(email: email, password: password)
+                BottomNavigationPanel(selectedProducts: $selectedProducts, email: email, password: password)
             }
         }
         .navigationBarHidden(true)
@@ -145,7 +145,7 @@ struct ProductItemView: View {
                                     }
                                 }) {
                                     Image(systemName: isWishlisted ? "heart.fill" : "heart")
-                                        .foregroundColor(isWishlisted ? .white: .black)
+                                        .foregroundColor(isWishlisted ? .red: .black)
                                         .padding(20)
                                         .clipShape(Circle())
                                         .font(.system(size: 23))
@@ -374,121 +374,79 @@ struct ProductSelectionPopup: View {
     }
 }
 
-    struct SortOptionsView: View {
-        var body: some View {
-            VStack {
-                Text("Sort by:")
-                    .font(.headline)
-                    .padding(.bottom)
-                
-                Button(action: {
-                    // Action when "Featured" is selected
-                }) {
-                    HStack {
-                        Text("Featured")
-                            .foregroundColor(.black)
-                        Spacer()
-                        if isSelected("Featured") {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
-                .padding(.bottom)
-                
-                Button(action: {
-                    // Action when "Newest" is selected
-                }) {
-                    HStack {
-                        Text("Newest")
-                            .foregroundColor(.black)
-                        Spacer()
-                        if isSelected("Newest") {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
-                .padding(.bottom)
-                
-                Button(action: {
-                    // Action when "Best Selling" is selected
-                }) {
-                    HStack {
-                        Text("Best Selling")
-                            .foregroundColor(.black)
-                        Spacer()
-                        if isSelected("Best Selling") {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
-                .padding(.bottom)
-                
-                Button(action: {
-                    // Action when "Price: Low to High" is selected
-                }) {
-                    HStack {
-                        Text("Price: Low to High")
-                            .foregroundColor(.black)
-                        Spacer()
-                        if isSelected("Price: Low to High") {
-                            Image(systemName: "checkmark")
-                            
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
-                .padding(.bottom)
-                
-                Button(action: {
-                    // Action when "Price: High to Low" is selected
-                }) {
-                    HStack {
-                        Text("Price: High to Low")
-                            .foregroundColor(.black)
-                        Spacer()
-                        if isSelected("Price: High to Low") {
-                            Image(systemName: "checkmark")
-                        }
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
-                }
-                .padding(.bottom)
-                
-                Button(action: {
-                    // Apply selected sort option
-                }) {
-                    Text("Apply")
-                        .foregroundColor(.white)
-                        .padding(.horizontal)
-                        .padding(.vertical, 10)
-                        .background(Color.black.opacity(10))
-                        .cornerRadius(10)
-                }
+struct SortOptionsView: View {
+    @State private var selectedOption: String?
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Sort & Filter by:")
+                .font(.headline)
+
+            Button(action: {
+                selectedOption = "Featured"
+            }) {
+                optionButton(label: "Featured", isSelected: selectedOption == "Featured")
             }
-            .padding()
-            .background(Color.white)
-            .cornerRadius(20)
-            .padding()
-            .shadow(radius: 5)
+
+            Button(action: {
+                selectedOption = "Newest"
+            }) {
+                optionButton(label: "Newest", isSelected: selectedOption == "Newest")
+            }
+
+            Button(action: {
+                selectedOption = "Best Selling"
+            }) {
+                optionButton(label: "Best Selling", isSelected: selectedOption == "Best Selling")
+            }
+
+            Button(action: {
+                selectedOption = "Price: Low to High"
+            }) {
+                optionButton(label: "Price: Low to High", isSelected: selectedOption == "Price: Low to High")
+            }
+
+            Button(action: {
+                selectedOption = "Price: High to Low"
+            }) {
+                optionButton(label: "Price: High to Low", isSelected: selectedOption == "Price: High to Low")
+            }
+
+            Button(action: {
+                applySortOption()
+            }) {
+                Text("Apply")
+                    .foregroundColor(.white)
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                    .background(Color.black)
+                    .cornerRadius(10)
+            }
         }
-        
-        private func isSelected(_ option: String) -> Bool {
-            // Implement logic to check if option is selected
-            return false
-        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(20)
+        .padding()
+        .shadow(radius: 5)
     }
-    
+
+    @ViewBuilder
+    private func optionButton(label: String, isSelected: Bool) -> some View {
+        HStack {
+            Text(label)
+                .foregroundColor(.black)
+            Spacer()
+            if isSelected {
+                Image(systemName: "checkmark")
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
+
+    private func applySortOption() {
+        // Apply selected sort option
+    }
+}
 

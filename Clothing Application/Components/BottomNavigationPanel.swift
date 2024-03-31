@@ -9,15 +9,12 @@ import SwiftUI
 
 struct BottomNavigationPanel: View {
     @State private var cartItemsCount: Int = 0
+    @Binding var selectedProducts: [Product]
+   
     
     let email: String
         let password: String
         
-        init(email: String, password: String) {
-            self.email = email
-            self.password = password
-        }
-    
     var body: some View {
         HStack {
             Spacer()
@@ -45,7 +42,7 @@ struct BottomNavigationPanel: View {
                 }
             }
             Spacer()
-            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount)) {
+            NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount,email: email,password: password)) {
                 ZStack(alignment: .top) {
                     Image(systemName: "square.grid.2x2")
                         .padding()
@@ -57,7 +54,7 @@ struct BottomNavigationPanel: View {
                 }
             }
             Spacer()
-            NavigationLink(destination: WishlistView()) {
+            NavigationLink(destination: WishlistView(selectedProducts: $selectedProducts, email:email,password: password)) {
                 ZStack(alignment: .top) {
                     Image(systemName: "heart")
                         .padding()
@@ -73,5 +70,6 @@ struct BottomNavigationPanel: View {
         .frame(height: 50)
         .background(Color.white)
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)
     }
 }

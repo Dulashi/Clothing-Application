@@ -122,12 +122,12 @@
 		BA18B1AE2BA9736D009ADDE9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BAB1EE982BB1BF63007C202B /* ProductDetailView.swift */,
 				BA18B1B12BA973A5009ADDE9 /* LoginView.swift */,
 				BA18B1B32BA973B6009ADDE9 /* AccountView.swift */,
 				BA18B1B52BA973D2009ADDE9 /* CreateAccountView.swift */,
 				BA18B1BD2BABED48009ADDE9 /* ProductListsView.swift */,
 				BA18B1C72BACA75B009ADDE9 /* CollectionsView.swift */,
-				BAB1EE982BB1BF63007C202B /* ProductDetailView.swift */,
 				BAB1EE9A2BB1F654007C202B /* ShoppingCartView.swift */,
 				BA0966AB2BB407CA00B6D322 /* CheckoutView.swift */,
 				BA0966B62BB56AFD00B6D322 /* HomeView.swift */,

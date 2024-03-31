@@ -22,6 +22,7 @@ struct CheckoutView: View {
     @State private var showAlert = false
     @State private var nextOrderNumber = 1
     @State private var password = ""
+    @State private var navigateToLogin = false
 
     init(selectedProducts: Binding<[Product]>, quantities: Binding<[Int]>) {
         self._selectedProducts = selectedProducts
@@ -37,7 +38,7 @@ struct CheckoutView: View {
                         .font(.title)
                     HStack {
                         Label("Delivery Information", systemImage: "shippingbox.fill")
-                            .foregroundColor(.orange)
+                            .foregroundColor(.brown)
                         Spacer()
                     }
                     .padding(.top)
@@ -51,8 +52,8 @@ struct CheckoutView: View {
                         }
                     }
                     HStack {
-                        Label("Payment", systemImage: "creditcard.fill")
-                            .foregroundColor(.orange)
+                        Label("Payment Information", systemImage: "creditcard.fill")
+                            .foregroundColor(.brown)
                         Spacer()
                     }
                     Section {
@@ -70,7 +71,7 @@ struct CheckoutView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Summary")
                             .font(.headline)
-                            .foregroundColor(.orange)
+                            .foregroundColor(.brown)
                         HStack {
                             Text("Subtotal:")
                             Spacer()
@@ -126,11 +127,10 @@ struct CheckoutView: View {
                     Image("banner2_home")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(height: 300)
+                        .frame(width:380 ,height: 80)
                 }
                 .padding()
                 .onAppear {
-                    // Load images when the view appears
                     for index in selectedProducts.indices {
                         loadImage(for: index)
                     }
@@ -147,6 +147,9 @@ struct CheckoutView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
+        .sheet(isPresented: $navigateToLogin) { // Added this line
+            LoginView()
+        } // Added this line
     }
 
     var totalPrice: Double {
@@ -197,33 +200,44 @@ struct CheckoutView: View {
                     .background(
                         Rectangle().foregroundColor(.clear)
                             .frame(height: 1)
-                            .padding(.top, 16) // Adjust this value to control the spacing between text and line
+                            .padding(.top, 16)
                     )
             }
         }
     }
 
     private func placeOrder() {
-        let order = Order(orderNumber: nextOrderNumber,
-                          fullName: fullName,
-                          email: email,
-                          streetAddress: streetAddress,
-                          city: city,
-                          postalCode: postalCode,
-                          items: selectedProducts.map { $0.name },
-                          totalNumberOfItems: totalNumberOfItems,
-                          totalAmount: totalPrice,
-                          cvc: cvc,
-                          expiryDate: expiryDate)
-        
-        let apiClient = OrderAPIClient()
-        apiClient.placeOrder(order: order) { error in
-            if let error = error {
-                print("Error placing order: \(error.localizedDescription)")
-            } else {
-                showAlert = true
-                nextOrderNumber += 1
+            let order = Order(orderNumber: nextOrderNumber,
+                              fullName: fullName,
+                              email: email,
+                              streetAddress: streetAddress,
+                              city: city,
+                              postalCode: postalCode,
+                              items: selectedProducts.map { $0.name },
+                              totalNumberOfItems: totalNumberOfItems,
+                              totalAmount: totalPrice,
+                              cvc: cvc,
+                              expiryDate: expiryDate)
+            
+            let apiClient = OrderAPIClient()
+            apiClient.placeOrder(order: order) { error in
+                if let error = error {
+                    print("Error placing order: \(error.localizedDescription)")
+                } else {
+                    nextOrderNumber += 1
+                    
+                    DispatchQueue.main.async {
+                        // Toggle the binding to navigate to LoginView
+                        navigateToLogin = true
+                    }
+                }
             }
         }
     }
+
+
+#Preview
+{
+    CheckoutView(selectedProducts: .constant([]), quantities: .constant([]))
 }
+

@@ -9,62 +9,123 @@ import SwiftUI
 
 struct WishlistView: View {
     @ObservedObject var wishlistManager = WishlistManager.shared
+    @Binding var selectedProducts: [Product]
+    @State private var cartItemsCount = 0
+    
+    let email: String
+    let password: String
+    
+    // Boolean to track if the view is active
+    @State private var isActive: Bool = false
 
     var body: some View {
+        VStack {
             Text("Wishlist")
-               .font(.title)
-                   .padding()
-        NavigationView {
+                .fontWeight(.regular)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                     ForEach(wishlistManager.wishlistProducts, id: \.name) { product in
-                        WishlistItemView(product: product)
+                        WishlistItemView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
                     }
                 }
                 .padding()
             }
+            BottomNavigationPanel(selectedProducts: $selectedProducts, email: email, password: password)
+                .edgesIgnoringSafeArea(.bottom)
         }
-        .navigationBarBackButtonHidden(true)
     }
-       
 }
 
 
 
 struct WishlistItemView: View {
     let product: Product
-    
+    @State private var imageData: Data? = nil
+    @Binding var selectedProducts: [Product]
+    @Binding var cartItemsCount: Int
+    @State private var isWishlisted = true // Assume all items in wishlist are already wishlisted
+    @State private var isShowingPopup = false // State variable to control pop-up presentation
+
     var body: some View {
-        VStack {
-            // Product image
-            if let firstImageUrl = product.imageUrls.first,
-               let url = URL(string: firstImageUrl),
-               let imageData = try? Data(contentsOf: url),
+        VStack(spacing: 10) {
+            if let imageData = imageData,
                let uiImage = UIImage(data: imageData) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 150, height: 150)
-                    .cornerRadius(10)
+                ZStack(alignment: .bottomLeading) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 250, height: 250)
+                        .cornerRadius(30)
+                        .onTapGesture {
+                            // Present detail view when tapped
+                        }
+                        .padding()
+
+                    HStack {
+                        Button(action: {
+                            // Toggle the pop-up
+                            isShowingPopup.toggle()
+                        }) {
+                            Image(systemName: "plus")
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .background(Color.black)
+                                .clipShape(Circle())
+                        }
+                        .offset(x: 170, y: -220)
+                    }
+                }
             } else {
                 Color.gray
-                    .frame(width: 150, height: 150)
-                    .cornerRadius(10)
+                    .frame(width: 250, height: 250)
+                    .cornerRadius(30)
             }
-            
-            // Product name
-            Text(product.name)
-                .font(.headline)
-                .padding(.top, 5)
-            
-            // Product price
-            Text("LKR \(String(format: "%.2f", product.price))")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+
+            VStack(alignment: .leading, spacing: 5) {
+                Text(product.name)
+                    .font(.system(size: 14))
+                    .lineLimit(2)
+
+                Text("LKR \(String(format: "%.2f", product.price))")
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.horizontal, 5) // Adjusted horizontal padding
+
+        }
+        .onAppear {
+            loadImage()
         }
         .padding()
-        .background(Color.white)
-        .cornerRadius(10)
-        .shadow(radius: 5)
+        // Show the pop-up sheet when isShowingPopup is true
+        .sheet(isPresented: $isShowingPopup) {
+            ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
+        }
     }
+
+    private func loadImage() {
+        guard let firstImageUrl = product.imageUrls.first,
+              let url = URL(string: firstImageUrl) else {
+            return
+        }
+
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.imageData = data
+            }
+        }.resume()
+    }
+
+    private func removeFromWishlist() {
+        WishlistManager.shared.removeFromWishlist(product.name)
+    }
+}
+
+
+#Preview{
+    WishlistView(selectedProducts: .constant([]), email: "", password: "")
 }

@@ -15,20 +15,22 @@ struct LoginView: View {
     @State private var isRecoveryLinkSent = false
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
-    
+  
     let loginViewModel = LoginViewModel()
     
     var body: some View {
         NavigationView {
             VStack {
-                Text("My Account")
+                Text("Sign In")
                     .font(.title)
                     .padding(.top, 50)
+                    .foregroundColor(.black)
+                
                 
                 Text("GlamCloth")
                     .font(.title)
                     .padding()
+                    .fontWeight(.bold)
                 
                 TextField("Email", text: $email)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -40,6 +42,7 @@ struct LoginView: View {
                 
                 Button(action: signIn) {
                     Text("Sign In")
+                        .foregroundColor(.black)
                 }
                 .padding()
                 
@@ -47,6 +50,7 @@ struct LoginView: View {
                     isRecoveryLinkSent.toggle()
                 }) {
                     Text("Forgot password?")
+                        .foregroundColor(.black)
                 }
                 .sheet(isPresented: $isRecoveryLinkSent, content: {
                     ForgotPasswordView(isPresented: $isRecoveryLinkSent, email: $email)
@@ -63,13 +67,15 @@ struct LoginView: View {
                         isCreateAccountViewActive.toggle()
                     }) {
                         Text("Don't have an account? Create Account")
+                            .foregroundColor(.black)
+                        
                     }
                     .padding()
                 }
             }
             .padding()
             .alert(isPresented: $showAlert) {
-                if alertMessage == "Login Successful" {
+                if alertMessage == "Login Successful and Your Order is Placed!" {
                     return Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 } else {
                     return Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
@@ -137,4 +143,8 @@ struct ForgotPasswordView: View {
             .padding()
         }
     }
+}
+
+#Preview {
+    LoginView()
 }
