@@ -33,39 +33,37 @@ struct ProductDetailView: View {
                                     AsyncImage(url: url) { phase in
                                         if let image = phase.image {
                                             image
-                                                .resizable() // Allow image to be resizable
-                                                .aspectRatio(contentMode: .fit) // Maintain aspect ratio
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
                                         } else if phase.error != nil {
-                                            // Handle error
                                             Text("Failed to load image")
                                         } else {
-                                            // Placeholder while loading
                                             ProgressView()
                                         }
                                     }
-                                    .frame(width: 600, height: 500) // Set a fixed size for the frame
+                                    .frame(width: 600, height: 500)
                                     .cornerRadius(20)
                                     .padding(.horizontal, -105)
                                 }
-                    // Name
+
                     Text(product.name)
                         .font(.title)
                         .fontWeight(.bold)
                         .padding(.horizontal)
                     
-                    // Price
+                   
                     Text("LKR \(String(format: "%.2f", product.price))")
                         .font(.headline)
                         .foregroundColor(.secondary)
                         .padding(.horizontal)
                     
-                    // Select Size
+                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Select Size")
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        // Buttons for sizes
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
                                 ForEach(product.sizes, id: \.self) { size in
@@ -85,13 +83,13 @@ struct ProductDetailView: View {
                         }
                     }
                     
-                    // Select Color
+                   
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Select Color")
                             .font(.headline)
                             .padding(.horizontal)
                         
-                        // Buttons for colors
+                       
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 10) {
                                 ForEach(product.colors, id: \.self) { color in
@@ -119,7 +117,7 @@ struct ProductDetailView: View {
                         }
                     }
                     
-                    // Add to Cart Button
+                    
                     Button(action: {
                         if let selectedSize = selectedSize, let selectedColor = selectedColor {
                             let selectedProduct = Product(
@@ -145,7 +143,7 @@ struct ProductDetailView: View {
                             .padding(.horizontal)
                     }
                     
-                    // Product Description
+                   
                     Text("Product Description:")
                         .font(.headline)
                         .padding(.horizontal)
@@ -153,15 +151,14 @@ struct ProductDetailView: View {
                     Text(product.description)
                         .padding(.horizontal)
                 }
-                .padding(.vertical) // Add vertical padding to the VStack
-                .frame(maxWidth: .infinity) // Ensure VStack doesn't exceed screen width
+                .padding(.vertical)
+                .frame(maxWidth: .infinity)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        // Back button action
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.black)

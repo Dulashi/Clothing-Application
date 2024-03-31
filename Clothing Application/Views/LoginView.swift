@@ -17,75 +17,82 @@ struct LoginView: View {
     @State private var alertMessage = ""
   
     let loginViewModel = LoginViewModel()
-    
     var body: some View {
-        NavigationView {
-            VStack {
-                Text("Sign In")
-                    .font(.title)
-                    .padding(.top, 50)
-                    .foregroundColor(.black)
-                
-                
-                Text("GlamCloth")
-                    .font(.title)
-                    .padding()
-                    .fontWeight(.bold)
-                
-                TextField("Email", text: $email)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                
-                SecureField("Password", text: $password)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
-                
-                Button(action: signIn) {
+            NavigationView {
+                VStack {
                     Text("Sign In")
+                        .font(.title)
+                        .padding(.top, 70)
                         .foregroundColor(.black)
-                }
-                .padding()
-                
-                Button(action: {
-                    isRecoveryLinkSent.toggle()
-                }) {
-                    Text("Forgot password?")
-                        .foregroundColor(.black)
-                }
-                .sheet(isPresented: $isRecoveryLinkSent, content: {
-                    ForgotPasswordView(isPresented: $isRecoveryLinkSent, email: $email)
-                })
-                
-                Spacer()
-                
-                NavigationLink(destination: HomeView(), isActive: $isAccountViewActive) {
-                    EmptyView()
-                }
-                
-                NavigationLink(destination: CreateAccountView(), isActive: $isCreateAccountViewActive) {
-                    Button(action: {
-                        isCreateAccountViewActive.toggle()
-                    }) {
-                        Text("Don't have an account? Create Account")
+                    
+                    
+                    Text("GlamCloth")
+                        .font(.title)
+                        .padding()
+                        .fontWeight(.bold)
+                    
+                    
+                    Text("Clothing company")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.top, -20)
+                    
+                    
+                    
+                    TextField("Email", text: $email)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                    SecureField("Password", text: $password)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                    Button(action: signIn) {
+                        Text("Sign In")
                             .foregroundColor(.black)
-                        
                     }
                     .padding()
+                    
+                    Button(action: {
+                        isRecoveryLinkSent.toggle()
+                    }) {
+                        Text("Forgot password?")
+                            .foregroundColor(.black)
+                    }
+                    .sheet(isPresented: $isRecoveryLinkSent, content: {
+                        ForgotPasswordView(isPresented: $isRecoveryLinkSent, email: $email)
+                    })
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: HomeView(), isActive: $isAccountViewActive) {
+                        EmptyView()
+                    }
+                    
+                    NavigationLink(destination: CreateAccountView(), isActive: $isCreateAccountViewActive) {
+                        Button(action: {
+                            isCreateAccountViewActive.toggle()
+                        }) {
+                            Text("Don't have an account? Create Account")
+                                .foregroundColor(.black)
+                            
+                        }
+                        .padding()
+                    }
                 }
-            }
-            .padding()
-            .alert(isPresented: $showAlert) {
-                if alertMessage == "Login Successful and Your Order is Placed!" {
-                    return Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-                } else {
-                    return Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                .padding()
+                .alert(isPresented: $showAlert) {
+                    if alertMessage == "Login Successful and Your Order is Placed!" {
+                        return Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    } else {
+                        return Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }
                 }
+                .navigationTitle("")
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
             }
-            .navigationTitle("")
-            .navigationBarHidden(true)
-            .navigationBarBackButtonHidden(true)
         }
-    }
     
     func signIn() {
         loginViewModel.signIn(email: email, password: password) { result in

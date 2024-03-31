@@ -17,9 +17,7 @@ class ProductViewModel: ObservableObject {
         }
         
         func fetchWishlistProducts() {
-                // Fetch wishlist products from WishlistManager
             let wishlistProducts = WishlistManager.shared.fetchWishlistProducts()
-                    // Update the products array with wishlist products
                     self.products = wishlistProducts
 
             }
@@ -32,7 +30,6 @@ class ProductViewModel: ObservableObject {
 
             do {
                 let decodedData = try JSONDecoder().decode([Product].self, from: data)
-                // Filter products by category "Dresses"
                 let dressesProducts = decodedData.filter { $0.category == "Dresses" }
                 DispatchQueue.main.async {
                     self.products = dressesProducts

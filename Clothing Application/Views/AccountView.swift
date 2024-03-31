@@ -10,7 +10,7 @@ import SwiftUI
 struct AccountView: View {
     let loginViewModel = LoginViewModel()
     let email: String
-    let password: String // Add password here
+    let password: String 
     @State private var user: User?
 
     var body: some View {
@@ -37,3 +37,4 @@ struct AccountView: View {
         }
     }
 }
+

@@ -44,29 +44,55 @@ struct CheckoutView: View {
                     .padding(.top)
                     Section {
                         VStack(alignment: .leading) {
-                            CustomTextField(text: $email, placeholder: "Email")
-                            CustomTextField(text: $fullName, placeholder: "Full Name")
-                            CustomTextField(text: $streetAddress, placeholder: "Street Address")
-                            CustomTextField(text: $city, placeholder: "City")
-                            CustomTextField(text: $postalCode, placeholder: "Postal Code")
-                        }
-                    }
-                    HStack {
-                        Label("Payment Information", systemImage: "creditcard.fill")
-                            .foregroundColor(.brown)
-                        Spacer()
-                    }
-                    Section {
-                        VStack(alignment: .leading) {
-                            CustomTextField(text: $paymentNumber, placeholder: "Payment Number")
-                                .keyboardType(.numberPad)
-                            SecureField("CVC", text: $cvc)
-                                .keyboardType(.numberPad)
-                            CustomTextField(text: $expiryDate, placeholder: "Expiry Date (MM/YY)")
-                                .keyboardType(.numberPad)
-                        }
-                    }
-                    
+                            TextField("Email", text: $email)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(5)
+                               
+                            
+                            TextField("Full Name", text: $fullName)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(5)
+                                
+                                                       
+                            TextField("Street Address", text: $streetAddress)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(5)
+                            
+                            TextField("City", text: $city)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(5)
+                            
+                            TextField("Postal Code", text: $postalCode)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding(5)
+                            
+                                               }
+                                           }
+                                           HStack {
+                                               Label("Payment Information", systemImage: "creditcard.fill")
+                                                   .foregroundColor(.brown)
+                                               Spacer()
+                                           }
+                                           Section {
+                                               VStack(alignment: .leading) {
+                                                   TextField("Payment Number", text: $paymentNumber)
+                                                       .keyboardType(.numberPad)
+                                                       .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                       .padding(5)
+                                                   
+                                                   
+                                                   SecureField("CVC", text: $cvc)
+                                                       .keyboardType(.numberPad)
+                                                       .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                       .padding(5)
+                                                   
+                                                   TextField("Expiry Date (MM/YY)", text: $expiryDate)
+                                                       .keyboardType(.numberPad)
+                                                       .textFieldStyle(RoundedBorderTextFieldStyle())
+                                                       .padding(5)
+                                                       
+                                               }
+                                           }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Summary")
@@ -102,7 +128,6 @@ struct CheckoutView: View {
                             .cornerRadius(8)
                     }
                     
-                    // Product Images Grid
                     ScrollView(.horizontal) {
                         LazyHGrid(rows: [GridItem(.flexible())], spacing: 10) {
                             ForEach(selectedProducts.indices, id: \.self) { index in
@@ -147,9 +172,9 @@ struct CheckoutView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .sheet(isPresented: $navigateToLogin) { // Added this line
+        .sheet(isPresented: $navigateToLogin) {
             LoginView()
-        } // Added this line
+        }
     }
 
     var totalPrice: Double {
@@ -180,30 +205,12 @@ struct CheckoutView: View {
             }
 
             DispatchQueue.main.async {
-                // Make sure the imageDatas array has enough elements
                 while index >= imageDatas.count {
                     imageDatas.append(nil)
                 }
                 imageDatas[index] = data
             }
         }.resume()
-    }
-
-    struct CustomTextField: View {
-        @Binding var text: String
-        var placeholder: String
-
-        var body: some View {
-            VStack(alignment: .leading, spacing: 0) {
-                TextField(placeholder, text: $text)
-                    .padding(.vertical, 8)
-                    .background(
-                        Rectangle().foregroundColor(.clear)
-                            .frame(height: 1)
-                            .padding(.top, 16)
-                    )
-            }
-        }
     }
 
     private func placeOrder() {
@@ -227,7 +234,6 @@ struct CheckoutView: View {
                     nextOrderNumber += 1
                     
                     DispatchQueue.main.async {
-                        // Toggle the binding to navigate to LoginView
                         navigateToLogin = true
                     }
                 }

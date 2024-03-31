@@ -10,8 +10,8 @@ import SwiftUI
 struct ProductListsView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var isShowingSortOptions = false
-    @State private var cartItemsCount = 0 // State to track cart items count
-    @State private var selectedProducts: [Product] = [] // State to track selected products
+    @State private var cartItemsCount = 0
+    @State private var selectedProducts: [Product] = [] 
     @State private var password = ""
     @State private var email = ""
     
@@ -20,7 +20,6 @@ struct ProductListsView: View {
             VStack {
                 ScrollView {
                     VStack {
-                        // Header
                         HStack {
                             NavigationLink(destination: CollectionsView(cartItemsCount: $cartItemsCount,email:email,password:password)) {
                                 Image(systemName: "chevron.left")
@@ -37,7 +36,7 @@ struct ProductListsView: View {
                                     Image(systemName: "cart")
                                         .padding()
                                         .foregroundColor(.gray)
-                                    if cartItemsCount > 0 { // Show cart items count if greater than 0
+                                    if cartItemsCount > 0 {
                                         Text("\(cartItemsCount)")
                                             .foregroundColor(.white)
                                             .frame(width: 20, height: 20)
@@ -101,20 +100,20 @@ struct ProductItemView: View {
     @State private var isShowingDetail = false
     @Binding var selectedProducts: [Product]
     @State private var isShowingPopup = false
-    @State private var isWishlisted = false // New state to track wishlist status
+    @State private var isWishlisted = false
     
     var body: some View {
         VStack {
             if let imageData = imageData,
                let uiImage = UIImage(data: imageData) {
-                ZStack(alignment: .bottomLeading) { // Stack for image and buttons
+                ZStack(alignment: .bottomLeading) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 250, height: 250)
                         .cornerRadius(30)
                         .onTapGesture {
-                            isShowingDetail = true // Present detail view when tapped
+                            isShowingDetail = true
                         }
                     
                     HStack {
@@ -133,14 +132,14 @@ struct ProductItemView: View {
                         
                         HStack {
                             Spacer()
-                            VStack { // ContentView for heart button
+                            VStack {
                                 Button(action: {
                                     isWishlisted.toggle()
                                     if isWishlisted {
-                                        // Add product to wishlist
+                                      
                                         saveToWishlist()
                                     } else {
-                                        // Remove product from wishlist
+                                       
                                         removeFromWishlist()
                                     }
                                 }) {
@@ -169,11 +168,11 @@ struct ProductItemView: View {
                         loadImage()
                     }
                     .onTapGesture {
-                        isShowingDetail = true // Present detail view when tapped
+                        isShowingDetail = true
                     }
             }
             
-            // Product details
+          
             VStack(alignment: .leading, spacing: 5) {
                 Text(product.name)
                     .font(.system(size: 14))
@@ -186,17 +185,6 @@ struct ProductItemView: View {
                     .padding(.horizontal, 5)
             }
             
-            Button(action: {
-                // Action when heart button is tapped
-            }) {
-                // Image(systemName: "heart")
-                //  .foregroundColor(.black)
-                // .offset(x: 60, y: -20);
-            }
-            .frame(width: 170)
-            .padding(.vertical, 5)
-            .background(Color.white)
-            .cornerRadius(10)
         }
         .sheet(isPresented: $isShowingDetail) {
             ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
@@ -261,7 +249,7 @@ struct ProductSelectionPopup: View {
                         .cornerRadius(5)
                 }
                 
-                // Product name and price
+               
                 Text(product.name)
                     .font(.caption)
                     .padding(.top, 5)
@@ -273,13 +261,13 @@ struct ProductSelectionPopup: View {
                 loadImage()
             }
             
-            // Select size
+            
             VStack(alignment: .leading, spacing: 10) {
                 Text("Select Size:")
                     .font(.headline)
                     .padding(.horizontal)
                 
-                // Buttons for sizes
+               
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(product.sizes, id: \.self) { size in
@@ -299,13 +287,13 @@ struct ProductSelectionPopup: View {
                 }
             }
             
-            // Select color
+           
             VStack(alignment: .leading, spacing: 10) {
                 Text("Select Color:")
                     .font(.headline)
                     .padding(.horizontal)
                 
-                // Buttons for colors
+               
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(product.colors, id: \.self) { color in
@@ -317,7 +305,7 @@ struct ProductSelectionPopup: View {
                                         .foregroundColor(Color(color))
                                         .frame(width: 30, height: 30)
                                     
-                                    Text(color) // Display color names inside oval shapes
+                                    Text(color)
                                         .foregroundColor(.black)
                                         .font(.caption)
                                 }
@@ -333,9 +321,8 @@ struct ProductSelectionPopup: View {
                 }
             }
             
-            // Add to Cart Button
+            
             Button(action: {
-                // Add the selected product to the cart
                 if let selectedSize = selectedSize, let selectedColor = selectedColor {
                     let selectedProduct = Product(name: product.name,  category:"", price: product.price, sizes: [selectedSize], colors: [selectedColor], description: "",imageUrls: product.imageUrls, available: Bool())
                     cartItemsCount += 1
@@ -446,7 +433,6 @@ struct SortOptionsView: View {
     }
 
     private func applySortOption() {
-        // Apply selected sort option
     }
 }
 

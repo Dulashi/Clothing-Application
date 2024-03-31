@@ -11,9 +11,9 @@ struct CollectionsView: View {
     @StateObject var viewModel = ProductViewModel()
     @State private var searchText = ""
     @State private var isSearching = false
-    @State private var selectedProduct: Product? = nil // State to track selected product
+    @State private var selectedProduct: Product? = nil
     @State private var selectedProducts: [Product] = []
-    @State private var navigateToProductLists = false // State to control navigation to ProductListsView
+    @State private var navigateToProductLists = false
     @Binding var cartItemsCount: Int
     
     let email: String
@@ -94,7 +94,6 @@ struct CollectionsView: View {
                                 CollectionOptionView(title: "NEW ARRIVALS")
                                 CollectionOptionView(title: "DRESSES")
                                     .onTapGesture {
-                                        // Navigate to ProductListsView when "DRESSES" is pressed
                                         navigateToProductLists = true
                                     }
                                 CollectionOptionView(title: "TOPS")
@@ -117,8 +116,8 @@ struct CollectionsView: View {
         }
         .background(
             NavigationLink(
-                destination: ProductListsView(viewModel: viewModel), // Destination is ProductListsView
-                isActive: $navigateToProductLists, // Activate link based on state
+                destination: ProductListsView(viewModel: viewModel),
+                isActive: $navigateToProductLists,
                 label: { EmptyView() }
             )
         )
@@ -142,10 +141,9 @@ struct CollectionsView: View {
     
     struct CollectionOptionView: View {
         var title: String
-        @State private var isActive = false // State to control navigation activation
+        @State private var isActive = false
         
         var body: some View {
-            // Use NavigationLink for navigation
             NavigationLink(
                 destination: ProductListsView(),
                 isActive: $isActive,
@@ -164,7 +162,6 @@ struct CollectionsView: View {
             .background(Color.black.opacity(0.8))
             .cornerRadius(10)
             .onTapGesture {
-                // Activate navigation when tapped
                 isActive = true
             }
         }
@@ -174,7 +171,7 @@ struct CollectionsView: View {
         static var previews: some View {
             let email = ""
             let password = ""
-            let cartItemsCount = Binding.constant(0) // Provide a mock binding for cartItemsCount
+            let cartItemsCount = Binding.constant(0) 
             return CollectionsView(cartItemsCount: cartItemsCount, email: email, password: password)
         }
     }

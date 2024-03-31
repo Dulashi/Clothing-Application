@@ -264,9 +264,14 @@ struct HomeView: View {
         } else {
             isSearching = true
             searchSuggestions = viewModel.products.filter { $0.name.lowercased().contains(searchText.lowercased()) }
-            print("Search suggestions:", searchSuggestions) // Check search suggestions
+            print("Search suggestions:", searchSuggestions) 
         }
     }
 }
 
 
+#Preview{
+    
+    HomeView()
+    
+}

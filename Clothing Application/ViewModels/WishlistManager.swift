@@ -6,15 +6,14 @@
 //
 
 import Foundation
-import Combine // Import Combine framework for ObservableObject
+import Combine
 
 class WishlistManager: ObservableObject {
     static let shared = WishlistManager()
     private let userDefaults = UserDefaults.standard
     private let wishlistKey = "wishlist"
     
-    @Published var wishlistProducts: [Product] = [] // Publish wishlistProducts to observe changes
-    
+    @Published var wishlistProducts: [Product] = [] 
     init() {
         self.wishlistProducts = getWishlistProducts()
         resetWishlist()
@@ -23,7 +22,7 @@ class WishlistManager: ObservableObject {
     func addToWishlist(name: String, price: Double, imageUrls: [String]) {
         var wishlistProducts = self.wishlistProducts
         
-        // Providing default values compatible with expected types
+       
         let product = Product(name: name, category: "", price: price, sizes: [], colors: [], description: "", imageUrls: imageUrls, available: false)
         
         wishlistProducts.append(product)
@@ -56,13 +55,11 @@ class WishlistManager: ObservableObject {
         let encoder = JSONEncoder()
         if let encodedData = try? encoder.encode(products) {
             userDefaults.set(encodedData, forKey: wishlistKey)
-            self.wishlistProducts = products // Update wishlistProducts and notify observers
+            self.wishlistProducts = products
         }
     }
     func resetWishlist() {
-        // Reset wishlistProducts to an empty array
         wishlistProducts = []
-        // Also clear the wishlist data stored in UserDefaults
         userDefaults.removeObject(forKey: wishlistKey)
     }
 }

@@ -76,15 +76,14 @@ struct ShoppingCartView: View {
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
-                                        .frame(width: 80, height: 80) // Adjust image size as needed
+                                        .frame(width: 80, height: 80)
                                         .cornerRadius(5)
                                 } else {
                                     Color.gray
-                                        .frame(width: 80, height: 80) // Adjust placeholder size
+                                        .frame(width: 80, height: 80)
                                         .cornerRadius(5)
                                 }
 
-                                // Product details
                                 VStack(alignment: .leading) {
                                     Text(product.name)
                                         .font(.system(size: 14))
@@ -102,7 +101,6 @@ struct ShoppingCartView: View {
                                         .font(.system(size: 14))
 
                                     HStack {
-                                        // Quantity selection
                                         Picker("Quantity", selection: Binding(
                                             get: { quantity },
                                             set: { quantities[index] = $0 }
@@ -117,13 +115,13 @@ struct ShoppingCartView: View {
 
                                         Spacer()
 
-                                        // Delete button
+                                       
                                         DeleteButton {
                                             deleteProduct(at: index)
                                         }
                                     }
                                 }
-                                .padding(.trailing, 8) // Adjust trailing padding
+                                .padding(.trailing, 8)
 
                             }
                             .padding(.vertical, 8)
@@ -143,7 +141,7 @@ struct ShoppingCartView: View {
 
                 Spacer()
 
-                // Total price display
+               
                 HStack {
                     Spacer()
                     Text("Total: LKR \(String(format: "%.2f", totalPrice))")
@@ -153,7 +151,7 @@ struct ShoppingCartView: View {
                 .padding(.vertical)
 
                 Button(action: {
-                    // Show checkout sheet
+                    
                     isCheckoutSheetPresented = true
                 }) {
                     Text("Checkout")
@@ -185,7 +183,7 @@ struct ShoppingCartView: View {
             }
 
             DispatchQueue.main.async {
-                // Make sure the imageDatas array has enough elements
+                
                 while index >= imageDatas.count {
                     imageDatas.append(nil)
                 }
@@ -196,14 +194,13 @@ struct ShoppingCartView: View {
 
     private func ensureQuantityCount(for index: Int) {
         while quantities.count <= index {
-            quantities.append(1) // Default quantity is 1
+            quantities.append(1)
         }
     }
 
     private func deleteProduct(at index: Int) {
         selectedProducts.remove(at: index)
 
-        // Remove corresponding image data and quantity
         if index < imageDatas.count {
             imageDatas.remove(at: index)
         }

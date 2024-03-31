@@ -15,7 +15,6 @@ struct WishlistView: View {
     let email: String
     let password: String
     
-    // Boolean to track if the view is active
     @State private var isActive: Bool = false
 
     var body: some View {
@@ -43,11 +42,12 @@ struct WishlistItemView: View {
     @State private var imageData: Data? = nil
     @Binding var selectedProducts: [Product]
     @Binding var cartItemsCount: Int
-    @State private var isWishlisted = true // Assume all items in wishlist are already wishlisted
-    @State private var isShowingPopup = false // State variable to control pop-up presentation
+    @State private var isWishlisted = true
+    @State private var isShowingPopup = false
+    @State private var isShowingDetail = false
 
     var body: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 0) {
             if let imageData = imageData,
                let uiImage = UIImage(data: imageData) {
                 ZStack(alignment: .bottomLeading) {
@@ -57,13 +57,12 @@ struct WishlistItemView: View {
                         .frame(width: 250, height: 250)
                         .cornerRadius(30)
                         .onTapGesture {
-                            // Present detail view when tapped
+                            isShowingDetail.toggle()
                         }
                         .padding()
 
                     HStack {
                         Button(action: {
-                            // Toggle the pop-up
                             isShowingPopup.toggle()
                         }) {
                             Image(systemName: "plus")
@@ -85,19 +84,22 @@ struct WishlistItemView: View {
                 Text(product.name)
                     .font(.system(size: 14))
                     .lineLimit(2)
+                    .padding(.horizontal, 10)
 
                 Text("LKR \(String(format: "%.2f", product.price))")
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
+                    .padding(.horizontal, 10)
             }
-            .padding(.horizontal, 5) // Adjusted horizontal padding
-
+            .padding(.bottom, 10)
         }
         .onAppear {
             loadImage()
         }
         .padding()
-        // Show the pop-up sheet when isShowingPopup is true
+        .sheet(isPresented: $isShowingDetail) {
+            ProductDetailView(product: product, selectedProducts: $selectedProducts, cartItemsCount: $cartItemsCount)
+        }
         .sheet(isPresented: $isShowingPopup) {
             ProductSelectionPopup(product: product, cartItemsCount: $cartItemsCount, selectedProducts: $selectedProducts)
         }
@@ -124,7 +126,6 @@ struct WishlistItemView: View {
         WishlistManager.shared.removeFromWishlist(product.name)
     }
 }
-
 
 #Preview{
     WishlistView(selectedProducts: .constant([]), email: "", password: "")
