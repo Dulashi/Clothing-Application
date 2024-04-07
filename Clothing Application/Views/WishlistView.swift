@@ -19,8 +19,15 @@ struct WishlistView: View {
 
     var body: some View {
         VStack {
-            Text("Wishlist")
-                .fontWeight(.regular)
+            VStack {
+                Text("Wishlist")
+                    .font(.title)
+                Image("discount_bar")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 400, height: 40)
+                
+            }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                     ForEach(wishlistManager.wishlistProducts, id: \.name) { product in
@@ -34,7 +41,6 @@ struct WishlistView: View {
         }
     }
 }
-
 
 
 struct WishlistItemView: View {
@@ -80,18 +86,16 @@ struct WishlistItemView: View {
                     .cornerRadius(30)
             }
 
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: 1) {
                 Text(product.name)
                     .font(.system(size: 14))
-                    .lineLimit(2)
-                    .padding(.horizontal, 10)
-
-                Text("LKR \(String(format: "%.2f", product.price))")
+            
+                    Text("LKR \(String(format: "%.2f", product.price))")
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
-                    .padding(.horizontal, 10)
+                  
             }
-            .padding(.bottom, 10)
+            
         }
         .onAppear {
             loadImage()
@@ -125,8 +129,4 @@ struct WishlistItemView: View {
     private func removeFromWishlist() {
         WishlistManager.shared.removeFromWishlist(product.name)
     }
-}
-
-#Preview{
-    WishlistView(selectedProducts: .constant([]), email: "", password: "")
 }

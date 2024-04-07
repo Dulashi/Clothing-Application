@@ -169,8 +169,3 @@ struct ProductDetailView: View {
     }
 }
 
-
-//#Preview{
-//    
-//    
-//}

@@ -15,36 +15,44 @@ struct LoginView: View {
     @State private var isRecoveryLinkSent = false
     @State private var showAlert = false
     @State private var alertMessage = ""
-  
+    @State private var createdUser: User?
+    @Binding var orderDetails: Order?
+    @Binding var selectedProducts: [Product]
+    
+    
+    let user: Binding<User?>
     let loginViewModel = LoginViewModel()
+
     var body: some View {
-            NavigationView {
+        NavigationView {
+            ZStack {
+                Image("background_color")
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+                
                 VStack {
                     Text("Sign In")
                         .font(.title)
                         .padding(.top, 70)
                         .foregroundColor(.black)
                     
-                    
                     Text("GlamCloth")
                         .font(.title)
                         .padding()
                         .fontWeight(.bold)
                     
-                    
                     Text("Clothing company")
                         .font(.caption)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
                         .padding(.top, -20)
                     
-                    
-                    
                     TextField("Email", text: $email)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(CustomTextFieldStyle())
                         .padding()
                     
                     SecureField("Password", text: $password)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(CustomTextFieldStyle())
                         .padding()
                     
                     Button(action: signIn) {
@@ -65,48 +73,48 @@ struct LoginView: View {
                     
                     Spacer()
                     
-                    NavigationLink(destination: HomeView(), isActive: $isAccountViewActive) {
+                    NavigationLink(destination: AccountView(user: $createdUser, order: orderDetails,selectedProducts: $selectedProducts, email: email, password: password), isActive: $isAccountViewActive) {
                         EmptyView()
-                    }
+                        }
                     
-                    NavigationLink(destination: CreateAccountView(), isActive: $isCreateAccountViewActive) {
+                    NavigationLink(destination: CreateAccountView(selectedProducts: $selectedProducts), isActive: $isCreateAccountViewActive) {
                         Button(action: {
                             isCreateAccountViewActive.toggle()
                         }) {
                             Text("Don't have an account? Create Account")
                                 .foregroundColor(.black)
-                            
                         }
                         .padding()
                     }
                 }
                 .padding()
+                .navigationBarHidden(true)
+                .navigationBarBackButtonHidden(true)
                 .alert(isPresented: $showAlert) {
-                    if alertMessage == "Login Successful and Your Order is Placed!" {
-                        return Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    if alertMessage == "Login Successful. Thank you for signing in!" {
+                        return Alert(title: Text("Success"), message: Text(alertMessage), dismissButton: .default(Text("OK")) {
+                            isAccountViewActive = true
+                            
+                        })
                     } else {
                         return Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                     }
                 }
-                .navigationTitle("")
-                .navigationBarHidden(true)
-                .navigationBarBackButtonHidden(true)
             }
         }
+    }
     
     func signIn() {
         loginViewModel.signIn(email: email, password: password) { result in
             switch result {
             case .success(let user):
                 if user.email == email && user.password == password {
-                  
                     DispatchQueue.main.async {
-                        isAccountViewActive = true
-                        alertMessage = "Login Successful"
+                        createdUser = user 
+                        alertMessage = "Login Successful. Thank you for signing in!"
                         showAlert = true
                     }
                 } else {
-                   
                     DispatchQueue.main.async {
                         alertMessage = "Incorrect email or password"
                         showAlert = true
@@ -114,7 +122,7 @@ struct LoginView: View {
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
-                    alertMessage = "An error occurred while signing in. Please try again later."
+                    alertMessage = "Login Failed: \(error.localizedDescription)"
                     showAlert = true
                 }
             }
@@ -152,6 +160,13 @@ struct ForgotPasswordView: View {
     }
 }
 
-#Preview {
-    LoginView()
+struct CustomTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<_Label>) -> some View {
+        configuration
+            .padding(.horizontal)
+            .frame(height: 40)
+            .background(Color.clear)
+            .foregroundColor(.black)
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.black, lineWidth: 1))
+    }
 }

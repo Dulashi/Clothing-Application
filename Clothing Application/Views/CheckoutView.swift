@@ -23,6 +23,8 @@ struct CheckoutView: View {
     @State private var nextOrderNumber = 1
     @State private var password = ""
     @State private var navigateToLogin = false
+    @State private var createdUser: User?
+    @State private var orderDetails: Order?
 
     init(selectedProducts: Binding<[Product]>, quantities: Binding<[Int]>) {
         self._selectedProducts = selectedProducts
@@ -164,7 +166,7 @@ struct CheckoutView: View {
                     Alert(title: Text("Order Confirmation"), message: Text("Your Order has been confirmed"), primaryButton: .default(Text("OK")), secondaryButton: .cancel())
                 }
                 .background(
-                    NavigationLink(destination: AccountView(email: email, password: password), isActive: $showAlert) {
+                    NavigationLink(destination: AccountView(user: $createdUser, order: orderDetails,selectedProducts: $selectedProducts, email: email, password: password), isActive: $showAlert) {
                         EmptyView()
                     }
                     .hidden()
@@ -173,7 +175,7 @@ struct CheckoutView: View {
         }
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $navigateToLogin) {
-            LoginView()
+            LoginView(orderDetails: $orderDetails, selectedProducts: $selectedProducts, user: $createdUser)
         }
     }
 
@@ -235,11 +237,13 @@ struct CheckoutView: View {
                     
                     DispatchQueue.main.async {
                         navigateToLogin = true
+                        orderDetails = order
                     }
                 }
             }
         }
     }
+
 
 
 #Preview

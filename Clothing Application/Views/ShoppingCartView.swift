@@ -62,7 +62,6 @@ struct ShoppingCartView: View {
                     Text("No items in the shopping cart")
                         .foregroundColor(.gray)
                 } else {
-                    // Display selected products
                     List {
                         ForEach(selectedProducts.indices, id: \.self) { index in
                             let product = selectedProducts[index]
@@ -70,7 +69,6 @@ struct ShoppingCartView: View {
                             let quantity = index < quantities.count ? quantities[index] : 1
 
                             HStack(spacing: 10) {
-                                // Product image
                                 if let imageData = imageData,
                                    let uiImage = UIImage(data: imageData) {
                                     Image(uiImage: uiImage)

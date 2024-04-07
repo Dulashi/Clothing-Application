@@ -10,7 +10,9 @@ import SwiftUI
 struct BottomNavigationPanel: View {
     @State private var cartItemsCount: Int = 0
     @Binding var selectedProducts: [Product]
-   
+    @State private var createdUser: User?
+    @State private var orderDetails: Order?
+    
     
     let email: String
         let password: String
@@ -30,7 +32,8 @@ struct BottomNavigationPanel: View {
                 }
             }
             Spacer()
-            NavigationLink(destination: AccountView(email: email, password: password)) {
+          
+            NavigationLink(destination: AccountView(user: $createdUser, order: orderDetails,selectedProducts: $selectedProducts, email: email, password: password)) {
                 ZStack(alignment: .top) {
                     Image(systemName: "person")
                         .padding()

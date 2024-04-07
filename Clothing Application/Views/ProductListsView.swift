@@ -15,6 +15,8 @@ struct ProductListsView: View {
     @State private var password = ""
     @State private var email = ""
     
+    @State private var isShowingPopup = false
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -50,7 +52,7 @@ struct ProductListsView: View {
                         .padding(.horizontal)
                         
                         Button(action: {
-                            isShowingSortOptions.toggle()
+                            isShowingPopup = true
                         }) {
                             ZStack {
                                 Rectangle()
@@ -88,7 +90,7 @@ struct ProductListsView: View {
         .navigationBarHidden(true)
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isShowingSortOptions) {
-            SortOptionsView()
+                   SortOptionsView(productLists: $viewModel.products)
         }
     }
 }
@@ -363,42 +365,43 @@ struct ProductSelectionPopup: View {
 
 struct SortOptionsView: View {
     @State private var selectedOption: String?
-
+    @Binding var productLists: [Product]
+    
     var body: some View {
         VStack(spacing: 20) {
             Text("Sort & Filter by:")
                 .font(.headline)
-
+            
             Button(action: {
                 selectedOption = "Featured"
             }) {
                 optionButton(label: "Featured", isSelected: selectedOption == "Featured")
             }
-
+            
             Button(action: {
                 selectedOption = "Newest"
             }) {
                 optionButton(label: "Newest", isSelected: selectedOption == "Newest")
             }
-
+            
             Button(action: {
                 selectedOption = "Best Selling"
             }) {
                 optionButton(label: "Best Selling", isSelected: selectedOption == "Best Selling")
             }
-
+            
             Button(action: {
                 selectedOption = "Price: Low to High"
             }) {
                 optionButton(label: "Price: Low to High", isSelected: selectedOption == "Price: Low to High")
             }
-
+            
             Button(action: {
                 selectedOption = "Price: High to Low"
             }) {
                 optionButton(label: "Price: High to Low", isSelected: selectedOption == "Price: High to Low")
             }
-
+            
             Button(action: {
                 applySortOption()
             }) {
@@ -416,7 +419,7 @@ struct SortOptionsView: View {
         .padding()
         .shadow(radius: 5)
     }
-
+    
     @ViewBuilder
     private func optionButton(label: String, isSelected: Bool) -> some View {
         HStack {
@@ -431,8 +434,15 @@ struct SortOptionsView: View {
         .background(Color.gray.opacity(0.1))
         .cornerRadius(10)
     }
-
+    
     private func applySortOption() {
+            switch selectedOption {
+            case "Price: Low to High":
+                productLists.sort { $0.price < $1.price }
+            case "Price: High to Low":
+                productLists.sort { $0.price > $1.price }
+            default:
+                break
+            }
+        }
     }
-}
-
